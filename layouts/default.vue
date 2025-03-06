@@ -1,0 +1,4 @@
+<template>
+  <PartialsHeader />
+  <slot />
+</template>

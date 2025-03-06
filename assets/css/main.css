@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "KyivTypeSerif";
+  src: url("/fonts/KyivTypeSerif-Black.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "KyivTypeSerif";
+  src: url("/fonts/KyivTypeSerif-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "KyivTypeSerif";
+  src: url("/fonts/KyivTypeSerif-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "KyivTypeSerif";
+  src: url("/fonts/KyivTypeSerif-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "KyivTypeSerif";
+  src: url("/fonts/KyivTypeSerif-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "KyivTypeSerif";
+  src: url("/fonts/KyivTypeSerif-Thin.ttf") format("truetype");
+  font-weight: 200;
+  font-style: normal;
+}
+
+@theme {
+  --font-sans: "KyivTypeSerif", sans-serif;
+
+  --radius-3.5xl: 30px;
+
+  --color-primary-red: #c82f28;
+  --color-black: #1c1c1c;
+  --color-white: #f3f3f5;
+  --color-text-grey: #b3b3b6;
+}
