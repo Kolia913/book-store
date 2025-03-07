@@ -2,7 +2,7 @@
   <div class="px-4 sm:px-8 md:px-16 lg:px-42 mx-auto overflow-hidden">
     <div class="app-text-h1 pt-8 sm:pt-12 lg:pt-20">інтерв'ю</div>
     <article class="app-text-body py-8 sm:py-12 relative">
-      <IconLightning1
+      <IconsIconLightning1
         class="absolute right-[-90px] rotate-180 md:rotate-0 md:left-[-220px] top-[-50px] md:top-[-90px]"
       />
       Вітаю, любий читачу. Зазвичай ніхто не заглядає на подібні розділи на
@@ -46,7 +46,7 @@
       відповідь, коли мене бʼють. Тож, не дослуживши рік до закінчення контракту
       я назбирав побільше слини за щоки й плюнув на військо, глибоко
       розчарований.
-      <IconLightning2 class="absolute right-[-590px] bottom-[-80px]" />
+      <IconsIconLightning2 class="absolute right-[-590px] bottom-[-80px]" />
       <br /><br />
       Наступні десять років працював тілоохоронцем, тобто бодіґардом. Теж не
       радісна робота, безперспективна. Та й гроші не як у Кевіна Костнера у
@@ -70,13 +70,7 @@
       повернувся. «Допилюю» дві крайні книги, працюю над наступною, «Парадокс
       мʼяса». Йде важко, «по живому». Але я не здаюся. Ніколи не здаюся. Й буду
       товкти цю стіну, допоки не пробʼю її. Або вона не розчавить мене.
-      <IconLightning3 class="absolute left-[-480px] bottom-[-80px]" />
+      <IconsIconLightning3 class="absolute left-[-480px] bottom-[-80px]" />
     </article>
   </div>
 </template>
-
-<script setup>
-import IconLightning1 from "~/components/icons/IconLightning1.vue";
-import IconLightning2 from "~/components/icons/IconLightning2.vue";
-import IconLightning3 from "~/components/icons/IconLightning3.vue";
-</script>

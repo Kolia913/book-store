@@ -1,4 +1,4 @@
 <template>
-  <HistoryExtBanner/>
-  <HistoryExtInterviewText/>
+  <HistoryExtBanner />
+  <HistoryExtInterviewText />
 </template>

@@ -10,7 +10,7 @@
     }"
   >
     <div>
-      <IconLogo width="150px" height="100%" />
+      <IconsIconLogo width="150px" height="100%" />
     </div>
     <ul
       class="flex justify-between items-center rounded-3.5xl border border-black"
@@ -47,7 +47,7 @@
     }"
   >
     <div class="w-full flex justify-between flex-row">
-      <IconLogo width="100px" height="100%" />
+      <IconsIconLogo width="100px" height="100%" />
       <IconsIconBurger width="40px" @click="openNav" />
     </div>
     <ul
@@ -65,16 +65,12 @@
         <NuxtLink :to="link.href">
           {{ link.title }}
         </NuxtLink>
-        <IconArrow width="30px" />
+        <IconsIconArrow width="30px" />
       </li>
     </ul>
   </nav>
 </template>
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
-import IconArrow from "../icons/IconArrow.vue";
-import IconLogo from "../icons/IconLogo.vue";
-
 const route = useRoute();
 const isNavWhite = computed(() => route.path === "/extended-history");
 const isNavShown = ref(false);
