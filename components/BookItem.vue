@@ -8,10 +8,10 @@
     <!-- Book Info -->
     <div class="w-3/4 flex flex-col items-end text-end px-6 gap-7">
       <div class="">
-        <h3 class="text-6xl font-semibold italic uppercase">
+        <h3 class="app-text-h1 font-semibold italic uppercase">
           {{ item.title }}
         </h3>
-        <p class="text-gray-600 text-3xl mt-2">
+        <p class="text-gray-600 app-text-body mt-2">
           {{ item.description }}
         </p>
       </div>
