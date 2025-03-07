@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./typography.css";
 
 @font-face {
   font-family: "KyivTypeSerif";
@@ -41,7 +42,12 @@
   font-weight: 200;
   font-style: normal;
 }
-
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/Inter-VariableFont_opsz,wght.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
 @theme {
   --font-sans: "KyivTypeSerif", sans-serif;
 

@@ -1,0 +1,41 @@
+.app-text-body {
+    font-family: Inter;
+    font-size: 32px;
+    font-weight: 400;
+    line-height: 1.3em;
+}
+
+.app-text-h1 {
+    font-family: KyivTypeSerif;
+    font-size: 64px;
+    font-weight: 500;
+    text-transform: uppercase;
+    line-height: 1.1em;
+}
+
+@media screen and (max-width: 1440px) {
+    .app-text-h1 {
+        font-size: 54px;
+    }
+    .app-text-body {
+        font-size: 26px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .app-text-h1 {
+        font-size: 44px;
+    }
+    .app-text-body {
+        font-size: 22px;
+    }
+}
+
+@media screen and (max-width: 425px) {
+    .app-text-h1 {
+        font-size: 38px;
+    }
+    .app-text-body {
+        font-size: 16px;
+    }
+}

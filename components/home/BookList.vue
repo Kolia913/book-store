@@ -1,6 +1,6 @@
 <template>
   <div class="px-[50px] mb-[186px]">
-    <h4 class="text-6xl font-[500] w-full uppercase mb-[72px]">Книги</h4>
+    <h4 class="app-text-h1 w-full mb-[72px]">Книги</h4>
     <div>
       <BookItem v-for="(item, idx) in books" :key="idx" :item="item" />
     </div>

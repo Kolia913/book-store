@@ -1,0 +1,4 @@
+<template>
+  <HistoryExtBanner/>
+  <HistoryExtInterviewText/>
+</template>

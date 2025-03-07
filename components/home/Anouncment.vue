@@ -13,7 +13,7 @@
       <div
         class="w-1/2 flex flex-col justify-between items-end text-white text-right"
       >
-        <h3 class="text-6xl font-[500] mb-[50px]">Анонс нової книги</h3>
+        <h3 class="app-text-h1 mb-[50px]">Анонс нової книги</h3>
         <p class="text-3xl leading-relaxed mt-4 mb-[136px]">
           “Книга «Скепсис» – фронтова повість, заснована на подіях 2014-2015
           років. Я писав її, вражений дрімучою «совковістю», з котрою

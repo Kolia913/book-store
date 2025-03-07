@@ -6,8 +6,8 @@
 
     <div class="flex flex-col justify-between pr-[52px] flex-1 min-h-[100%]">
       <div>
-        <h2 class="uppercase text-6xl pb-[60px] font-[500]">Моя історія</h2>
-        <p class="text-wrap text-2xl font-normal">
+        <h2 class="app-text-h1 pb-[60px]">Моя історія</h2>
+        <p class="text-wrap app-text-body font-normal">
           Явився я на світ Божий останнього місяця сімдесят шостого року
           двадцятого сторіччя – саме тоді, коли зародились перші бактерії з
           водоростями. Тоді бронтозаври чубились зі стегозаврами за володіння
@@ -21,7 +21,12 @@
         </p>
       </div>
 
-      <AtomsAppOutlinedButton value="Більше" color="black" class="mt-auto" />
+      <AtomsAppOutlinedButton
+        value="Більше"
+        color="black"
+        class="mt-auto"
+        @click="$router.push('/extended-history')"
+      />
     </div>
   </div>
 </template>

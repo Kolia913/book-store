@@ -1,6 +1,6 @@
 <template>
   <button
-    class="flex justify-center items-center gap-4 w-fit h-fit rounded-3.5xl py-6 px-12 text-3xl cursor-pointer duration-200"
+    class="flex justify-center items-center gap-4 w-fit h-fit rounded-3.5xl py-4 px-8 text-xl cursor-pointer duration-200"
     :class="{
       'bg-primary-red  text-white hover:bg-red-800': color === 'red',
       'bg-white text-black hover:bg-gray-200': color === 'white',
