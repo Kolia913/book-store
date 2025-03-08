@@ -98,4 +98,13 @@ Please, copy .env.example -> .env and adjust ur environment
 
 1. Ensure node_modules are installed
 2. Ensure u have npx utility
-3. Run `npx sequelize-cli db:seed:all`
+3. Check if ur .env file is filled
+4. Run `npx sequelize-cli db:seed:all`
+
+### Create migration
+
+`npx sequelize-cli migration:generate --name <migration-name>`
+
+### Create seeder
+
+`npx sequelize-cli seed:generate --name demo-user`
