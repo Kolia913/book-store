@@ -1,12 +1,18 @@
 <template>
-  <div class="flex justify-start items-stretch gap-[170px] pt-[168px]">
-    <div class="shrink-0">
-      <img src="/images/history.png" class="w-auto h-auto" />
+  <div
+    class="flex justify-start flex-col-reverse lg:flex-row items-stretch gap-12 lg:gap-0 pt-[60px]"
+  >
+    <div class="flex-1">
+      <img src="/images/history.png" class="w-auto h-auto object-fit" />
     </div>
 
-    <div class="flex flex-col justify-between pr-[52px] flex-1 min-h-[100%]">
+    <div class="flex flex-col justify-between px-[32px] flex-1 min-h-[100%]">
       <div>
-        <h2 class="app-text-h1 pb-[60px]">Моя історія</h2>
+        <h2
+          class="app-text-h1 pb-[10px] sm:pb-[20px] lg:pb-[10px] xl:pb-[30px]"
+        >
+          Моя історія
+        </h2>
         <p class="text-wrap app-text-body font-normal">
           Явився я на світ Божий останнього місяця сімдесят шостого року
           двадцятого сторіччя – саме тоді, коли зародились перші бактерії з
@@ -24,9 +30,16 @@
       <AtomsAppOutlinedButton
         value="Більше"
         color="black"
-        class="mt-auto"
+        class="mt-8"
         @click="$router.push('/extended-history')"
       />
     </div>
   </div>
 </template>
+<style scoped>
+@media (min-width: 1024px) {
+  .app-text-body {
+    font-size: 1.7vw !important;
+  }
+}
+</style>

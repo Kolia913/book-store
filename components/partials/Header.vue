@@ -13,7 +13,7 @@
       <IconsIconLogo width="150px" height="100%" />
     </div>
     <ul
-      class="flex justify-between items-center rounded-3.5xl border border-black"
+      class="flex justify-between items-center rounded-3xl border border-black"
       :class="{
         'border-white': isNavWhite,
       }"
@@ -21,7 +21,7 @@
       <li
         v-for="(link, idx) in links"
         :key="link.href + idx"
-        class="py-4 px-8 text-xl lg:text-2xl cursor-pointer hover:underline duration-200 rounded-3.5xl"
+        class="py-4 px-8 text-xl lg:text-2xl cursor-pointer hover:underline duration-200 rounded-3xl"
         :class="{
           'bg-black text-white': link.href === route.path,
         }"
@@ -31,7 +31,11 @@
         </NuxtLink>
       </li>
     </ul>
-    <AtomsAppButton value="Кошик" @click="console.log(123)" color="red">
+    <AtomsAppButton
+      value="Кошик"
+      @click="console.log(123)"
+      :color="isNavWhite ? 'white' : 'red'"
+    >
       <template #icon>
         <IconsCart />
       </template>
@@ -42,8 +46,9 @@
     class="flex lg:hidden fixed justify-between items-center px-2 z-55 w-full bg-transparent transition-all duration-300 ease-in-out"
     :class="{
       'bg-white fixed text-black': isScrolled,
-      'text-white': !isScrolled && isNavWhite,
+      'text-white': !isScrolled && isNavWhite && !isNavShown,
       'text-black': !isNavWhite && !isScrolled,
+      'text-black bg-white': isNavShown && isNavWhite,
     }"
   >
     <div class="w-full flex justify-between flex-row">
@@ -52,7 +57,7 @@
     </div>
     <ul
       v-show="isNavShown"
-      class="absolute top-20 w-spec flex flex-col items-start px-2 py-2 rounded-2xl border border-black bg-white"
+      class="absolute top-17 w-full left-0 flex flex-col items-start px-2 rounded-b-2xl py-2 border-b border-black bg-white"
     >
       <li
         v-for="(link, idx) in links"
@@ -67,10 +72,22 @@
         </NuxtLink>
         <IconsIconArrow width="30px" />
       </li>
+      <AtomsAppButton
+        value="Кошик"
+        @click="console.log(123)"
+        color="red"
+        class="w-full mt-4"
+      >
+        <template #icon>
+          <IconsCart />
+        </template>
+      </AtomsAppButton>
     </ul>
   </nav>
 </template>
 <script setup>
+import AppButton from "../atoms/AppButton.vue";
+
 const route = useRoute();
 const isNavWhite = computed(() => route.path === "/extended-history");
 const isNavShown = ref(false);
@@ -116,13 +133,20 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener("scroll", handleScroll);
 });
+
+watch(
+  () => route.path,
+  () => {
+    isNavShown.value = false;
+  }
+);
 </script>
 
 <style scoped>
-.w-spec {
-  width: calc(100% - 1rem);
-}
 .bg-gray-800 {
   background-color: #2d3748;
+}
+li:nth-last-child(1) {
+  border: none;
 }
 </style>

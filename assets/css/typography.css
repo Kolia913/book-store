@@ -4,7 +4,12 @@
   font-weight: 400;
   line-height: 1.3em;
 }
-
+.app-text-small {
+  font-family: Inter;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.3em;
+}
 .app-text-body-2 {
   font-family: Inter;
   font-size: 36px;
