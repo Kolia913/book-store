@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: postgres-app
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DB=${DATABASE_NAME}
+    volumes:
+      - postgres_16_data:/var/lib/postgresql/data
+    networks:
+      - bks_net
+  app:
+    build: .
+    restart: unless-stopped
+    container_name: book-store-app
+    depends_on:
+      - postgres
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    networks:
+      - bks_net
+
+volumes:
+  postgres_16_data:
+
+networks:
+  bks_net:
+    driver: bridge
