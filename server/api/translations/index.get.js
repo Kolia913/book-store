@@ -1,7 +1,6 @@
 import { Translation } from "~/server/database/models/Translation.js";
 export default defineEventHandler(async (event) => {
   try {
-    console.log("Get translations");
     const translations = await Translation.findAll({
       attributes: ["key", "text_ua"],
     });
