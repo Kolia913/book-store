@@ -2,12 +2,12 @@ import Joi from "joi";
 import { Translation } from "~/server/database/models/Translation";
 
 const schema = Joi.object({
-  key: Joi.string().min(3).max(255).required(),
   text_ua: Joi.string().required(),
 });
 
 export default defineEventHandler(async (event) => {
   try {
+    const key = getRouterParam(event, "key");
     const body = await readBody(event);
     const { error, value } = schema.validate(body);
     if (error) {
@@ -19,20 +19,24 @@ export default defineEventHandler(async (event) => {
     }
 
     const existingTranslation = await Translation.findOne({
-      where: { key: value.key },
+      where: { key },
     });
 
-    if (existingTranslation) {
+    if (!existingTranslation) {
       return createError({
-        message: "key should be unique",
-        statusCode: 409,
-        statusMessage: "Conflict",
+        message: "Translation not found",
+        statusCode: 404,
+        statusMessage: "Not Found",
       }).toJSON();
     }
 
-    const newTranslation = await Translation.create(value);
-    setResponseStatus(event, 201);
-    return newTranslation;
+    await Translation.update(value, {
+      where: { key },
+    });
+
+    const updatedTranslation = await Translation.findOne({ where: { key } });
+    setResponseStatus(event, 200);
+    return updatedTranslation;
   } catch (err) {
     const error = createError({
       message: "Something went wrong",
