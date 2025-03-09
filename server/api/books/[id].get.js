@@ -1,28 +1,30 @@
-import { Translation } from "~/server/database/models/Translation";
+import { Book } from "~/server/database/models/Book";
 
 export default defineEventHandler(async (event) => {
   try {
-    const key = getRouterParam(event, "key");
+    const id = getRouterParam(event, "id");
 
-    const existingTranslation = await Translation.findOne({
-      where: { key },
-    });
-
-    if (!existingTranslation) {
-      setResponseStatus(event, 404);
+    if (!Number.isInteger(+id)) {
+      setResponseStatus(event, 400);
       return createError({
-        message: "Translation not found",
-        statusCode: 404,
-        statusMessage: "Not Found",
+        statusCode: 400,
+        statusMessage: "Bad Request",
+        message: "Invalid book id",
       }).toJSON();
     }
 
-    await Translation.destroy({
-      where: { key },
-    });
+    const book = await Book.findByPk(parseInt(id));
 
+    if (!book) {
+      setResponseStatus(event, 404);
+      return createError({
+        statusCode: 404,
+        statusMessage: "Not Found",
+        message: "Book not found",
+      }).toJSON();
+    }
     setResponseStatus(event, 200);
-    return { message: "Translation deleted successfully" };
+    return book;
   } catch (err) {
     const error = createError({
       message: "Something went wrong",

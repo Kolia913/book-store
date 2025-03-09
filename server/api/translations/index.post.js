@@ -11,6 +11,7 @@ export default defineEventHandler(async (event) => {
     const body = await readBody(event);
     const { error, value } = schema.validate(body);
     if (error) {
+      setResponseStatus(event, 422);
       return createError({
         message: error.details[0].message,
         statusCode: 422,
@@ -23,6 +24,7 @@ export default defineEventHandler(async (event) => {
     });
 
     if (existingTranslation) {
+      setResponseStatus(event, 409);
       return createError({
         message: "key should be unique",
         statusCode: 409,

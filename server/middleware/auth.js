@@ -7,6 +7,7 @@ export default defineEventHandler(async (event) => {
 
   const protectedRoutes = [
     { route: "/api/translations", methods: ["POST", "PUT", "DELETE"] },
+    { route: "/api/admin/change-password", methods: ["POST"] },
   ];
 
   const isProtectedRoute = protectedRoutes.some(
@@ -17,6 +18,7 @@ export default defineEventHandler(async (event) => {
     const token = event.node.req.headers["authorization"]?.split(" ")[1];
 
     if (!token) {
+      setResponseStatus(event, 401);
       return createError({
         statusCode: 401,
         message: "Token is required",
