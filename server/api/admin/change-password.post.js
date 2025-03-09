@@ -9,7 +9,6 @@ const schema = Joi.object({
 });
 
 function createInvalidCredentialsErrorJSON() {
-  setResponseStatus(event, 401);
   return createError({
     message: "Invalid username or old password",
     statusCode: 401,
@@ -38,10 +37,12 @@ export default defineEventHandler(async (event) => {
     const existingAdmin = await Admin.findOne({ where: { username } });
 
     if (!existingAdmin) {
+      setResponseStatus(event, 401);
       return createInvalidCredentialsErrorJSON();
     }
 
     if (!comparePasswords(oldPassword, existingAdmin.password)) {
+      setResponseStatus(event, 401);
       return createInvalidCredentialsErrorJSON();
     }
 
