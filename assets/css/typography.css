@@ -16,10 +16,22 @@
   font-weight: 400;
   line-height: 1.3em;
 }
-
+.app-text-block-heading {
+  font-size: 22px;
+  font-weight: 500;
+  font-family: KyivTypeSerif;
+}
 .app-text-h1 {
   font-family: KyivTypeSerif;
   font-size: 64px;
+  font-weight: 500;
+  text-transform: uppercase;
+  line-height: 1.1em;
+}
+
+.app-text-h2 {
+  font-family: KyivTypeSerif;
+  font-size: 32px;
   font-weight: 500;
   text-transform: uppercase;
   line-height: 1.1em;
@@ -32,6 +44,10 @@
   .app-text-body {
     font-size: 26px;
   }
+  .app-text-block-heading {
+    font-size: 20px;
+    font-weight: 500;
+  }
 }
 
 @media screen and (max-width: 768px) {
@@ -41,6 +57,9 @@
   .app-text-body {
     font-size: 22px;
   }
+  .app-text-h2 {
+    font-size: 24px;
+  }
 }
 
 @media screen and (max-width: 425px) {
@@ -49,5 +68,8 @@
   }
   .app-text-body {
     font-size: 16px;
+  }
+  .app-text-h2 {
+    font-size: 20px;
   }
 }

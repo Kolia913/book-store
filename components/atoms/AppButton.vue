@@ -4,6 +4,8 @@
     :class="{
       'bg-primary-red  text-white hover:bg-red-800': color === 'red',
       'bg-white text-black hover:bg-gray-200': color === 'white',
+      'bg-[#ABE19D] border rounded-lg text-black hover:bg-[#ABE19D]':
+        color === 'green',
     }"
     v-bind="$attrs"
   >
