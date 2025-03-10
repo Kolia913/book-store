@@ -13,10 +13,10 @@ const books = [
     discount_price: null,
     discount_price_with_signature: null,
     images: [
-      "/images/book1",
-      "/images/book1",
-      "/images/book1",
-      "/images/book1",
+      "/uploads/book1",
+      "/uploads/book1",
+      "/uploads/book1",
+      "/uploads/book1",
     ],
   },
   {
@@ -31,7 +31,7 @@ const books = [
     price_with_signature: 120,
     discount_price: 90,
     discount_price_with_signature: 110,
-    images: ["/images/book2", "/images/book2"],
+    images: ["/uploads/book2", "/uploads/book2"],
   },
 ];
 
