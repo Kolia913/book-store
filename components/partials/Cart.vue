@@ -22,9 +22,20 @@
           class="flex justify-between items-center p-4 border-b border-[#D9D9D9]"
         >
           <p>1 шт.</p>
-          <div>видалити все</div>
+          <div class="cursor-pointer">видалити все</div>
         </div>
-        <CartItem />
+        <div class="max-h-[calc(100vh-116px)] overflow-auto">
+          <div class="flex flex-col justify-start items-center w-full">
+            <CartItem class="w-full" />
+          </div>
+          <div class="w-full h-fit px-4 pb-4">
+            <AtomsAppButton
+              color="black"
+              value="Оформити замовлення"
+              class="w-full"
+            />
+          </div>
+        </div>
       </div>
     </Transition>
   </div>
