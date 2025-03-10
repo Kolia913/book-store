@@ -1,6 +1,10 @@
 @import "tailwindcss";
 @import "./typography.css";
 
+html {
+  scroll-behavior: smooth;
+}
+
 @font-face {
   font-family: "KyivTypeSerif";
   src: url("/fonts/KyivTypeSerif-Black.ttf") format("truetype");
@@ -57,5 +61,4 @@
   --color-black: #1c1c1c;
   --color-white: #f3f3f5;
   --color-text-grey: #b3b3b6;
-  
 }

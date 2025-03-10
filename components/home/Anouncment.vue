@@ -1,5 +1,9 @@
 <template>
-  <div class="py-[38px] mt-12 lg:mt-24 flex justify-center">
+  <div
+    v-if="adminDavDobro"
+    class="pt-[50px] xl:pt-[138px] mt-12 lg:mt-24 flex justify-center"
+    id="anons"
+  >
     <!-- Main Container -->
     <div
       class="w-full rounded-3.5xl bg-primary-red p-[40px] sm:p-[50px] flex justify-center items-center gap-[50px] lg:gap-[110px] lg:py-[50px] xl:py-[100px] relative"
@@ -31,3 +35,6 @@
     </div>
   </div>
 </template>
+<script setup>
+const adminDavDobro = ref(true);
+</script>

@@ -7,7 +7,7 @@
     <div class="relative">
       <select
         v-model="model"
-        class="w-full border border-black bg-[#E9E9E9] rounded-xl py-4 px-3 focus:outline-none focus:ring-2 focus:border-transparent"
+        class="cursor-pointer w-full border border-black bg-[#E9E9E9] rounded-xl py-4 px-3 focus:outline-none focus:ring-2 focus:border-transparent"
       >
         <option v-for="option in options" :value="option.value">
           {{ option.label }}

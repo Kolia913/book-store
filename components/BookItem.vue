@@ -35,8 +35,13 @@
               query: { item: JSON.stringify(item) },
             })
           "
+          class="w-full sm:w-auto"
         />
-        <AtomsAppOutlinedButton value="Купити" color="filled" />
+        <AtomsAppOutlinedButton
+          value="Купити"
+          color="filled"
+          class="w-full sm:w-auto"
+        />
       </div>
     </div>
   </div>

@@ -36,6 +36,11 @@
   text-transform: uppercase;
   line-height: 1.1em;
 }
+.app-text-price {
+  font-family: KyivTypeSerif;
+  font-size: 32px;
+  font-weight: 500;
+}
 
 @media screen and (max-width: 1440px) {
   .app-text-h1 {
