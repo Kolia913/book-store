@@ -5,12 +5,14 @@
   <div class="grid grid-cols-1 md:grid-cols-10 gap-4 px-4 pt-8 pb-24 xl:px-50">
     <!-- Контактні дані -->
     <div
-      class="md:col-span-6 h-[470px] sm:h-[520px] bg-white rounded-3.5xl relative p-4 sm:p-6 md:py-12 md:pt-5"
+      class="md:col-span-6 order-2 md:order-none h-[470px] sm:h-[520px] xl:h-[300px] bg-white rounded-3.5xl relative p-4 sm:p-6 md:py-12 md:pt-5"
     >
       <div class="absolute z-50 top-3 left-4 sm:left-6 app-text-block-heading">
         Контактні дані
       </div>
-      <div class="grid grid-cols-1 gap-4 sm:gap-x-24 gap-y-4 sm:gap-y-7 pt-10">
+      <div
+        class="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-x-24 gap-y-4 sm:gap-y-7 pt-10"
+      >
         <AtomsAppInput
           v-model="name"
           label="Ім'я"
@@ -41,7 +43,7 @@
 
     <!-- Кошик -->
     <div
-      class="md:col-span-4 h-fit md:h-[520px] bg-white rounded-3.5xl relative p-4 sm:p-6 md:py-12 md:pt-5"
+      class="md:col-span-4 order-1 md:order-none h-fit md:h-[520px] xl:h-[300px] bg-white rounded-3.5xl relative p-4 sm:p-6 md:py-4 md:pt-5"
     >
       <div class="flex flex-col justify-between h-full">
         <div
@@ -81,13 +83,13 @@
             </div>
           </div>
         </div>
-        <div class="pt-4 md:pt-12">Разом до сплати 100$</div>
+        <div class="pt-4 app-text-block-heading">Разом до сплати 100$</div>
       </div>
     </div>
 
     <!-- Доставка -->
     <div
-      class="md:col-span-6 h-[370px] sm:h-[300px] md:h-[270px] bg-white rounded-3.5xl relative p-4 sm:p-6 md:pt-5"
+      class="md:col-span-6 h-[370px] order-2 md:order-none sm:h-[300px] md:h-[280px] bg-white rounded-3.5xl relative p-4 sm:p-6 md:pt-5"
     >
       <div class="absolute z-50 top-3 left-4 sm:left-6 app-text-block-heading">
         Доставка
@@ -107,7 +109,9 @@
     </div>
 
     <!-- Підтвердити замовлення -->
-    <div class="md:col-span-4 h-fit bg-white rounded-3.5xl p-4 sm:p-8">
+    <div
+      class="md:col-span-4 order-3 md:order-none h-fit bg-white rounded-3.5xl p-4 sm:p-8"
+    >
       <div class="flex flex-col justify-center items-center gap-4">
         <AtomsAppButton value="Підтвердити замовлення" color="green" />
         <div class="text-center cursor-pointer hover:underline">
@@ -118,7 +122,7 @@
 
     <!-- Спосіб оплати -->
     <div
-      class="md:col-span-6 h-[230px] bg-white rounded-3.5xl relative p-4 sm:p-6 md:pt-6"
+      class="md:col-span-6 order-2 md:order-none h-[230px] bg-white rounded-3.5xl relative p-4 sm:p-6 md:pt-6"
     >
       <div class="absolute z-50 top-3 left-4 sm:left-6 app-text-block-heading">
         Спосіб оплати

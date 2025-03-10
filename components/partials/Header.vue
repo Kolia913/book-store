@@ -110,23 +110,23 @@ const toggleCart = () => {
 const links = ref([
   {
     title: "Книги",
-    href: "/books",
+    href: "#books",
   },
   {
     title: "Автор",
-    href: "/",
+    href: "#story",
   },
   {
     title: "Анонс",
-    href: "/anons",
+    href: "#anons",
   },
   {
     title: "Акція",
-    href: "/sale",
+    href: "#sale",
   },
   {
     title: "Події",
-    href: "/events",
+    href: "#events",
   },
 ]);
 

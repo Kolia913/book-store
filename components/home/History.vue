@@ -1,6 +1,7 @@
 <template>
   <div
-    class="flex justify-start flex-col-reverse lg:flex-row items-stretch gap-12 lg:gap-0 pt-[60px]"
+    class="flex justify-start flex-col-reverse lg:flex-row items-stretch gap-12 lg:gap-0 pt-[50px] xl:pt-[138px]"
+    id="story"
   >
     <div class="flex-1">
       <img src="/images/history.png" class="w-auto h-auto object-fit" />
