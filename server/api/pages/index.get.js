@@ -1,13 +1,12 @@
-import { Book } from "~/server/database/models/Book.js";
+import { Page } from "~/server/database/models/Page.js";
+
 export default defineEventHandler(async (event) => {
-  const query = getQuery(event);
   try {
-    // == should be there :)
-    const books = await Book.findAll({
-      where: { draft: query.draft == "true" },
+    const pages = await Page.findAll({
+      attributes: ["id", "key", "admin_title", "title"],
     });
     setResponseStatus(event, 200);
-    return books;
+    return pages;
   } catch (err) {
     const error = createError({
       message: "Something went wrong",

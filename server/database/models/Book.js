@@ -10,6 +10,11 @@ Book.init(
       autoIncrement: true,
       primaryKey: true,
     },
+    draft: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
+    },
     author: {
       type: DataTypes.STRING(512),
       allowNull: false,

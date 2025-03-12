@@ -1,3 +1,4 @@
+import consola from "consola";
 import fs from "fs/promises";
 import path from "path";
 
@@ -13,12 +14,16 @@ export async function addFile(file) {
     await fs.mkdir(uploadDir, { recursive: true });
     const filePath = path.join(
       uploadDir,
-      `${file.filename}_${dateNow.toISOString()}`
+      `${file.filename}_${dateNow.toISOString()}.${file.filename
+        .split(".")
+        .at(-1)}`
     );
     await fs.writeFile(filePath, file.data);
 
     return {
-      path: `/uploads/${file.filename}_${dateNow.toISOString()}`,
+      path: `/uploads/${file.filename}_${dateNow.toISOString()}.${file.filename
+        .split(".")
+        .at(-1)}`,
     };
   } catch (error) {
     throw new Error(`Error adding file: ${error.message}`);
@@ -50,18 +55,21 @@ export async function bulkAddFiles(files) {
  * @param {string} path - The path of the file to delete.
  * @returns {Promise<Object>} - Success message and file path.
  */
-export async function removeFile(path) {
+export async function removeFile(imagePath) {
   try {
-    const filePath = path.join(process.cwd(), path);
+    const filePath = path.join(process.cwd(), "public", imagePath);
     await fs.unlink(filePath);
     return {
-      path,
+      path: imagePath,
     };
   } catch (error) {
     if (error.code === "ENOENT") {
-      throw new Error("File not found");
+      consola.error(
+        `File: "/public${imagePath}" not found. Deletion skipped for this file`
+      );
+    } else {
+      throw new Error(`Error removing file: ${error.message}`);
     }
-    throw new Error(`Error removing file: ${error.message}`);
   }
 }
 
@@ -76,12 +84,12 @@ export async function bulkRemoveFiles(paths) {
     for (const path of paths) {
       fileRemovePromises.push(removeFile(path));
     }
-    const removedPaths = await Promise.all(fileUploadPromises);
+    const removedPaths = await Promise.all(fileRemovePromises);
     return {
-      paths: removedPaths.map((item) => item.path),
+      paths: removedPaths.filter((item) => !!item).map((item) => item.path),
     };
   } catch (error) {
-    throw new Error(`Error adding files: ${error.message}`);
+    throw new Error(`Error removing files: ${error.message}`);
   }
 }
 
@@ -93,10 +101,10 @@ export async function bulkRemoveFiles(paths) {
  */
 export async function replaceFiles(oldFilesPaths, newFiles) {
   try {
-    await Promise.all(bulkRemoveFiles(oldFilesPaths));
-    const newFilesPaths = await Promise.all(bulkAddFiles(newFiles));
+    await bulkRemoveFiles(oldFilesPaths);
+    const newFilesPaths = await bulkAddFiles(newFiles);
     return {
-      paths: newFilesPaths.map((item) => item.path),
+      paths: newFilesPaths.paths,
     };
   } catch (error) {
     throw new Error(`Error replacing files: ${error.message}`);
