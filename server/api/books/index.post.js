@@ -5,6 +5,7 @@ import { bulkAddFiles } from "~/server/utils/fileStorage";
 const schema = Joi.object({
   author: Joi.string().max(512).required(),
   title: Joi.string().max(1024).required(),
+  draft: Joi.boolean().default(false).required(),
   page_desc_caption: Joi.string().allow(null, ""),
   description: Joi.string().allow(null, ""),
   is_available: Joi.boolean().default(false),
@@ -13,27 +14,28 @@ const schema = Joi.object({
   price_with_signature: Joi.number().required(),
   discount_price: Joi.number().allow(null),
   discount_price_with_signature: Joi.number().allow(null),
-  images: Joi.array().max(4).items(Joi.string()).default([]),
+  images: Joi.array().max(4).default([]),
 });
 
 export default defineEventHandler(async (event) => {
+  const images = [];
   try {
+    const imagesToUpload = [];
     const body = await readMultipartFormData(event);
-    const images = [];
     const data = {};
     for (const item of body) {
       if (item.name === "images") {
-        const bulkAdditionResult = await bulkAddFiles(
-          Array.isArray(item) ? item : [item]
-        );
-        images.push(...bulkAdditionResult.paths);
+        imagesToUpload.push(item);
       } else {
         data[item.name] = item.data.toString();
       }
     }
+    const bulkAdditionResult = await bulkAddFiles(imagesToUpload);
+    images.push(...bulkAdditionResult.paths);
     data.images = images;
     const { error, value } = schema.validate(data);
     if (error) {
+      bulkRemoveFiles(images);
       setResponseStatus(event, 422);
       return createError({
         message: error.details[0].message,
@@ -45,6 +47,7 @@ export default defineEventHandler(async (event) => {
     setResponseStatus(event, 201);
     return newBook;
   } catch (err) {
+    bulkRemoveFiles(images);
     const error = createError({
       message: "Something went wrong",
       statusCode: 500,
