@@ -9,7 +9,7 @@
       'bg-white': isScrolled && !isNavWhite,
     }"
   >
-    <div>
+    <div class="cursor-pointer" @click="() => scrollTo('#hero')">
       <IconsIconLogo width="150px" height="100%" />
     </div>
     <ul
@@ -23,12 +23,13 @@
         :key="link.href + idx"
         class="py-4 px-8 text-xl lg:text-2xl cursor-pointer hover:underline duration-200 rounded-3xl"
         :class="{
-          'bg-black text-white': link.href === route.path,
+          'bg-black text-white': link.href === `#${currentAnchor}`,
         }"
+        @click="() => navigate(link.href)"
       >
-        <NuxtLink :to="link.href">
+        <div>
           {{ link.title }}
-        </NuxtLink>
+        </div>
       </li>
     </ul>
     <AtomsAppButton
@@ -66,12 +67,13 @@
           :key="link.href + idx"
           class="w-full flex justify-between px-1 py-1 text-3xl cursor-pointer border-b-1 hover:underline duration-200 text-black"
           :class="{
-            'bg-black text-white': link.href === route.path,
+            'bg-black text-white': link.href === currentAnchor,
           }"
+          @click="() => navigate(link.href)"
         >
-          <NuxtLink :to="link.href">
+          <div>
             {{ link.title }}
-          </NuxtLink>
+          </div>
           <IconsIconArrow width="30px" />
         </li>
         <AtomsAppButton
@@ -93,10 +95,12 @@
 </template>
 <script setup>
 const route = useRoute();
+const router = useRouter();
 const isNavWhite = computed(() => route.path === "/extended-history");
 const isNavShown = ref(false);
 const isScrolled = ref(false);
 const isCartOpen = ref(false);
+const currentAnchor = ref("");
 
 const openNav = () => {
   isNavShown.value = !isNavShown.value;
@@ -108,10 +112,6 @@ const toggleCart = () => {
 };
 
 const links = ref([
-  {
-    title: "Книги",
-    href: "#books",
-  },
   {
     title: "Автор",
     href: "#story",
@@ -125,6 +125,10 @@ const links = ref([
     href: "#sale",
   },
   {
+    title: "Книги",
+    href: "#books",
+  },
+  {
     title: "Події",
     href: "#events",
   },
@@ -135,9 +139,52 @@ const handleScroll = () => {
   isScrolled.value = scrollPosition > 0;
 };
 
+function scrollTo(anchor) {
+  const element = document.querySelector(anchor);
+  if (element) {
+    element.scrollIntoView({ behavior: "smooth" });
+  }
+}
+
+function navigate(anchor) {
+  if (isNavShown.value) isNavShown.value = false;
+  currentAnchor.value = anchor;
+  if (route.path !== "/") {
+    router.push("/").then(scrollTo(anchor));
+  } else {
+    scrollTo(anchor);
+  }
+}
+
+const setupIntersectionObserver = () => {
+  const options = {
+    root: null,
+    rootMargin: "0px",
+    threshold: 0.5,
+  };
+
+  const callback = (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        currentAnchor.value = entry.target.id;
+        console.log(entry.target.id);
+      }
+    });
+  };
+
+  const observer = new IntersectionObserver(callback, options);
+
+  links.value.forEach((link) => {
+    const section = document.querySelector(link.href);
+    if (section) {
+      observer.observe(section);
+    }
+  });
+};
 onMounted(() => {
   window.addEventListener("scroll", handleScroll);
   handleScroll();
+  setupIntersectionObserver();
 });
 
 onUnmounted(() => {
@@ -148,6 +195,7 @@ watch(
   () => route.path,
   () => {
     isNavShown.value = false;
+    setupIntersectionObserver();
   }
 );
 </script>
