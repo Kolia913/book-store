@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-full h-fit pt-20 lg:pt-38">
+  <div class="relative w-full h-fit pt-20 lg:pt-38" id="hero">
     <img src="/images/banner.png" class="w-full h-auto object-cover" />
     <div
       class="absolute flex flex-row-reverse justify-center gap-3.5 text-white bottom-1 md:bottom-6 w-full -ml-[50px]"
