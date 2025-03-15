@@ -18,7 +18,7 @@ module.exports = {
       admin_title: {
         type: Sequelize.STRING(512),
         allowNull: false,
-        unique: true,
+        unique: false,
       },
       title: {
         type: Sequelize.STRING(512),

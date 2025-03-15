@@ -24,7 +24,7 @@ Page.init(
     admin_title: {
       type: DataTypes.STRING(512),
       allowNull: false,
-      unique: true,
+      unique: false,
     },
     content: {
       type: DataTypes.JSON,

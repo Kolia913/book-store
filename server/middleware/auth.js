@@ -9,6 +9,7 @@ export default defineEventHandler(async (event) => {
     { route: "/api/translations", methods: ["POST", "PUT", "DELETE"] },
     { route: "/api/admin/change-password", methods: ["POST"] },
     { route: "/api/books", methods: ["POST", "PUT", "DELETE"] },
+    { route: "/api/pages", methods: ["POST", "PUT"] },
   ];
 
   const isProtectedRoute = protectedRoutes.some(

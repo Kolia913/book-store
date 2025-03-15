@@ -3,7 +3,6 @@ import { Page } from "~/server/database/models/Page";
 export default defineEventHandler(async (event) => {
   try {
     const key = getRouterParam(event, "key");
-
     const page = await Page.findOne({ where: { key } });
 
     if (!page) {
