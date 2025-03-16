@@ -10,4 +10,9 @@ export default defineNuxtConfig({
   vite: {
     plugins: [tailwindcss()],
   },
+  routeRules: {
+    "/api/**": {
+      proxy: { to: "http://127.0.0.1:3000/api/**" },
+    },
+  },
 });
