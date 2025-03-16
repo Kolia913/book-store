@@ -1,0 +1,130 @@
+[
+  {
+    "icon": "md-dashboard",
+    "isGroup": false,
+    "title": "Панель",
+    "link": "/",
+    "key": null
+  },
+  {
+    "icon": "bi-newspaper",
+    "isGroup": false,
+    "title": "Статті",
+    "link": "/articles"
+  },
+  {
+    "icon": "md-permdeviceinformation",
+    "isGroup": false,
+    "title": "Інфо блог",
+    "link": "/usefularticles"
+  },
+  {
+    "icon": "md-category-outlined",
+    "isGroup": false,
+    "title": "Категорії",
+    "link": "/categories",
+    "key": null
+  },
+  {
+    "isGroup": true,
+    "title": "Запити клієнтів",
+    "key": "user_feedbacks",
+    "subItems": [
+      {
+        "icon": "bi-chat-dots-fill",
+        "isGroup": false,
+        "title": "Запити клієнтів",
+        "link": "/feedback",
+        "key": "feedback"
+      }
+    ]
+  },
+  {
+    "isGroup": true,
+    "title": "Меню",
+    "key": "menu",
+    "subItems": []
+  },
+  {
+    "isGroup": true,
+    "title": "Контент",
+    "key": "Content",
+    "subItems": [
+      {
+        "icon": "bi-card-image",
+        "isGroup": false,
+        "title": "Слайдер",
+        "link": "/slides",
+        "key": null
+      },
+      {
+        "icon": "md-stars-round",
+        "isGroup": false,
+        "title": "Переваги",
+        "link": "/advantages",
+        "key": null
+      },
+      {
+        "icon": "bi-question-circle-fill",
+        "isGroup": false,
+        "title": "Часті запитання",
+        "link": "/faq"
+      },
+      {
+        "icon": "hi-document-duplicate",
+        "isGroup": false,
+        "title": "Статичні сторінки",
+        "link": "/staticpages"
+      },
+      {
+        "icon": "hi-document-duplicate",
+        "isGroup": false,
+        "title": "Системні сторінки",
+        "link": "/systempages",
+        "key": null
+      }
+    ]
+  },
+  {
+    "isGroup": true,
+    "title": "Адміністрування",
+    "key": "Settings",
+    "subItems": [
+      {
+        "icon": "bi-translate",
+        "isGroup": false,
+        "title": "Переклади",
+        "link": "/softwaretext",
+        "key": null
+      },
+      {
+        "isGroup": false,
+        "title": "Налаштування",
+        "link": "/websettings",
+        "icon": "md-settingssuggest-round",
+        "key": null
+      },
+      {
+        "isGroup": false,
+        "title": "Seo Налаштування",
+        "link": "/seosettings",
+        "icon": "md-displaysettings",
+        "key": null
+      },
+      {
+        "icon": "fa-robot",
+        "isGroup": false,
+        "title": "Robots.txt",
+        "link": "/robots",
+        "key": null
+      },
+      {
+        "icon": "bi-pc-display-horizontal",
+        "isGroup": false,
+        "title": "Файловий менеджер",
+        "link": "/filemanager",
+        "key": "file_manager"
+      }
+    ]
+  }
+]
