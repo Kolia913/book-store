@@ -1,11 +1,5 @@
 <template>
-  <div
-    :class="{
-      'bg-white': $route.path !== '/order',
-      'bg-[#E9E9E9]': $route.path === '/order',
-    }"
-    v
-  >
+  <div class="bg-white">
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>

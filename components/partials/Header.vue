@@ -36,9 +36,15 @@
       value="Кошик"
       @click="toggleCart"
       :color="isNavWhite ? 'white' : 'red'"
+      class="relative"
     >
       <template #icon>
         <IconsCart />
+        <div
+          class="absolute -top-1 -left-1 bg-black rounded-[50%] w-6 h-6 pt-[1px] text-sm flex justify-center"
+        >
+          1
+        </div>
       </template>
     </AtomsAppButton>
   </nav>
@@ -80,9 +86,14 @@
           value="Кошик"
           @click="toggleCart"
           color="red"
-          class="w-full mt-4"
+          class="w-full mt-4 relative"
         >
           <template #icon>
+            <div
+              class="absolute left-18 bg-black rounded-[50%] w-8 h-8 flex justify-center items-center"
+            >
+              1
+            </div>
             <IconsCart />
           </template>
         </AtomsAppButton>
