@@ -9,6 +9,7 @@ export default defineEventHandler(async (_event) => {
       delivery_data: JSON.parse(item.delivery_data),
     }));
   } catch (err) {
+    setResponseStatus(event, 500);
     const error = createError({
       message: "Something went wrong",
       statusCode: 500,

@@ -36,6 +36,7 @@ export default defineEventHandler(async (event) => {
     setResponseStatus(event, 201);
     return newTranslation;
   } catch (err) {
+    setResponseStatus(event, 500);
     const error = createError({
       message: "Something went wrong",
       statusCode: 500,

@@ -28,6 +28,7 @@ export default defineEventHandler(async (event) => {
 
     return { message: "Customer deleted successfully" };
   } catch (err) {
+    setResponseStatus(event, 500);
     const error = createError({
       message: "Something went wrong",
       statusCode: 500,

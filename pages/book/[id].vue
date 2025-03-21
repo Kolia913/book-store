@@ -82,7 +82,6 @@ const cartStore = useCartStore();
 const bookId = route.params.id;
 
 const { data: books } = useNuxtData("booksData");
-
 const { data: bookData } = useLazyFetch(`/api/books/${bookId}`, {
   key: `book-${route.params.id}`,
   default() {

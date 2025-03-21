@@ -36,7 +36,7 @@ export default defineEventHandler(async (event) => {
     setResponseStatus(event, 201);
     return { message: "Customer created successfully.", customer };
   } catch (err) {
-    console.error("Error processing request:", err);
+    setResponseStatus(event, 500);
     const error = createError({
       message: "Something went wrong",
       statusCode: 500,
