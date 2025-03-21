@@ -84,6 +84,7 @@ export default defineEventHandler(async (event) => {
     setResponseStatus(event, 201);
     return res;
   } catch (err) {
+    setResponseStatus(event, 500);
     bulkRemoveFiles(images);
     return createError({
       message: "Something went wrong",

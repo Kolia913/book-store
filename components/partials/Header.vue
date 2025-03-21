@@ -23,7 +23,10 @@
         :key="link.href + idx"
         class="py-4 px-8 text-xl lg:text-2xl cursor-pointer hover:underline duration-200 rounded-3xl"
         :class="{
-          'bg-black text-white': link.href === `#${currentAnchor}`,
+          'bg-black text-white':
+            link.href === `#${currentAnchor}` && !isNavWhite,
+          'bg-white text-black':
+            isNavWhite && link.href === `#${currentAnchor}`,
         }"
         @click="() => navigate(link.href)"
       >
@@ -41,9 +44,13 @@
       <template #icon>
         <IconsCart />
         <div
-          class="absolute -top-1 -left-1 bg-black rounded-[50%] w-6 h-6 pt-[1px] text-sm flex justify-center"
+          v-if="cartCount > 0"
+          class="absolute bg-black -top-1 -left-1 rounded-[50%] w-6 h-6 pt-[2px] text-sm flex justify-center"
+          :class="{
+            'bg-primary-red text-white': isNavWhite,
+          }"
         >
-          1
+          {{ cartCount }}
         </div>
       </template>
     </AtomsAppButton>
@@ -90,9 +97,10 @@
         >
           <template #icon>
             <div
+              v-if="cartCount > 0"
               class="absolute left-18 bg-black rounded-[50%] w-8 h-8 flex justify-center items-center"
             >
-              1
+              {{ cartCount }}
             </div>
             <IconsCart />
           </template>
@@ -100,18 +108,28 @@
       </ul>
     </Transition>
   </nav>
-  <Transition name="slide-fade">
-    <PartialsCart v-if="isCartOpen" @close="toggleCart" />
-  </Transition>
+
+  <ClientOnly>
+    <Transition name="slide-fade">
+      <PartialsCart v-if="isCartOpen" @close="toggleCart" />
+    </Transition>
+  </ClientOnly>
 </template>
 <script setup>
 const route = useRoute();
 const router = useRouter();
+
 const isNavWhite = computed(() => route.path === "/extended-history");
 const isNavShown = ref(false);
 const isScrolled = ref(false);
 const isCartOpen = ref(false);
 const currentAnchor = ref("");
+
+const translationsStore = useTranslationsStore();
+const cartStore = useCartStore();
+
+const links = computed(() => translationsStore.getHeaderLinks);
+const cartCount = computed(() => cartStore.count);
 
 const openNav = () => {
   isNavShown.value = !isNavShown.value;
@@ -121,29 +139,6 @@ const toggleCart = () => {
   isCartOpen.value = !isCartOpen.value;
   isNavShown.value = false;
 };
-
-const links = ref([
-  {
-    title: "Автор",
-    href: "#story",
-  },
-  {
-    title: "Анонс",
-    href: "#anons",
-  },
-  {
-    title: "Акція",
-    href: "#sale",
-  },
-  {
-    title: "Книги",
-    href: "#books",
-  },
-  {
-    title: "Події",
-    href: "#events",
-  },
-]);
 
 const handleScroll = () => {
   const scrollPosition = window.scrollY;
@@ -178,7 +173,6 @@ const setupIntersectionObserver = () => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         currentAnchor.value = entry.target.id;
-        console.log(entry.target.id);
       }
     });
   };
@@ -192,6 +186,7 @@ const setupIntersectionObserver = () => {
     }
   });
 };
+
 onMounted(() => {
   window.addEventListener("scroll", handleScroll);
   handleScroll();

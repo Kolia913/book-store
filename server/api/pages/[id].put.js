@@ -107,6 +107,7 @@ export default defineEventHandler(async (event) => {
     existingPage.content = JSON.parse(existingPage.content);
     return existingPage;
   } catch (err) {
+    setResponseStatus(event, 500);
     bulkRemoveFiles(newImages);
     return createError({
       message: "Something went wrong",

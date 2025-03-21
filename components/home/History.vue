@@ -29,7 +29,7 @@
       </div>
 
       <AtomsAppOutlinedButton
-        value="Більше"
+        :value="data.button_more"
         color="black"
         class="mt-8"
         @click="$router.push('/extended-history')"
@@ -37,6 +37,14 @@
     </div>
   </div>
 </template>
+<script setup>
+defineProps({
+  data: {
+    type: Object,
+    required: true,
+  },
+});
+</script>
 <style scoped>
 @media (min-width: 1024px) {
   .app-text-body {

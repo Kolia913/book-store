@@ -9,6 +9,7 @@ export default defineEventHandler(async (event) => {
       translations.map((item) => [item.key, item.text_ua])
     );
   } catch (err) {
+    setResponseStatus(event, 500);
     const error = createError({
       message: "Something went wrong",
       statusCode: 500,

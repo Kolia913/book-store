@@ -30,11 +30,21 @@
         </p>
 
         <!-- Button (Right-Aligned) -->
-        <AtomsAppOutlinedButton value="Більше" color="white" class="" />
+        <AtomsAppOutlinedButton
+          :value="data.button_more"
+          color="white"
+          class=""
+        />
       </div>
     </div>
   </div>
 </template>
 <script setup>
+defineProps({
+  data: {
+    type: Object,
+    required: true,
+  },
+});
 const adminDavDobro = ref(true);
 </script>

@@ -1,14 +1,17 @@
 import Joi from "joi";
-import { Translation } from "~/server/database/models/Translation";
+import { Customer } from "~/server/database/models/Customer";
 
 const schema = Joi.object({
-  key: Joi.string().min(3).max(255).required(),
-  text_ua: Joi.string().required(),
+  phone: Joi.string().max(20).required(),
+  name: Joi.string().max(256).required(),
+  surname: Joi.string().max(256).required(),
+  email: Joi.string().max(512).required().email(),
 });
 
 export default defineEventHandler(async (event) => {
   try {
     const body = await readBody(event);
+
     const { error, value } = schema.validate(body);
     if (error) {
       setResponseStatus(event, 422);
@@ -19,22 +22,19 @@ export default defineEventHandler(async (event) => {
       }).toJSON();
     }
 
-    const existingTranslation = await Translation.findOne({
-      where: { key: value.key },
-    });
+    const { phone, name, surname, email } = value;
 
-    if (existingTranslation) {
-      setResponseStatus(event, 409);
-      return createError({
-        message: "key should be unique",
-        statusCode: 409,
-        statusMessage: "Conflict",
-      }).toJSON();
+    let customer = await Customer.findOne({ where: { phone } });
+
+    if (customer) {
+      await customer.update({ name, surname, email });
+      setResponseStatus(event, 200);
+      return { message: "Customer updated successfully.", customer };
     }
 
-    const newTranslation = await Translation.create(value);
+    customer = await Customer.create({ phone, name, surname, email });
     setResponseStatus(event, 201);
-    return newTranslation;
+    return { message: "Customer created successfully.", customer };
   } catch (err) {
     setResponseStatus(event, 500);
     const error = createError({
