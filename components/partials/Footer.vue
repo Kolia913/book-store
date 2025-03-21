@@ -5,9 +5,11 @@
     <div class="px-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
       <IconsIconLogo class="w-[fit-content] h-[80%] self-center" />
       <ul class="flex app-text-body flex-col lg:items-center justify-between">
-        <div class="app-text-body-2 font-bold mb-2">Сайт</div>
+        <div class="app-text-body-2 font-bold mb-2">
+          {{ otherTranslations.footer_links_title }}
+        </div>
         <li
-          v-for="(link, idx) in links"
+          v-for="(link, idx) in linksTranslations.links"
           :key="link.href + idx"
           class="text-lg lg:text-xl cursor-pointer hover:underline duration-200 rounded-3.5xl pb-2"
         >
@@ -17,9 +19,11 @@
         </li>
       </ul>
       <ul class="flex app-text-body flex-col justify-between">
-        <div class="app-text-body-2 font-bold mb-2">Інформація</div>
+        <div class="app-text-body-2 font-bold mb-2">
+          {{ otherTranslations.footer_info_title }}
+        </div>
         <li
-          v-for="(link, idx) in info"
+          v-for="(link, idx) in linksTranslations.info"
           :key="link.href + idx"
           class="text-lg lg:text-xl cursor-pointer hover:underline duration-200 rounded-3.5xl pb-2"
         >
@@ -30,61 +34,40 @@
       </ul>
       <div class="flex flex-col justify-between">
         <div class="app-text-body-2 font-bold">
-          Григорій Обертайло
+          {{ otherTranslations.general_author_name }}
           <div class="flex items-center gap-12 h-fit">
-            <IconsIconInstagram class="w-[30px]" />
-            <IconsIconFacebook class="w-[30px]" />
-            <IconsIconYoutube class="w-[30px]" />
+            <NuxtLink :to="otherTranslations.instagram_link" target="_blank">
+              <IconsIconInstagram class="w-[30px]" />
+            </NuxtLink>
+            <NuxtLink :to="otherTranslations.facebook_link" target="_blank">
+              <IconsIconFacebook class="w-[30px]" />
+            </NuxtLink>
+            <NuxtLink :to="otherTranslations.youtube_link" target="_blank">
+              <IconsIconYoutube class="w-[30px]" />
+            </NuxtLink>
           </div>
         </div>
 
         <div class="text-gray-400 text-sm">
-          Kyiv Type Serif font by Dmitry Rastvortsev, licensed under CC BY-ND
-          4.0
+          {{ otherTranslations.footer_license }}
         </div>
       </div>
     </div>
   </footer>
 </template>
 <script setup>
-const route = useRoute();
+const translationsStore = useTranslationsStore();
 
-const links = ref([
-  {
-    title: "книги",
-    href: "/books",
-  },
-  {
-    title: "автор",
-    href: "/",
-  },
-  {
-    title: "анонс",
-    href: "/anons",
-  },
-  {
-    title: "акція",
-    href: "/sale",
-  },
-]);
-const info = ref([
-  {
-    title: "доставка і оплата",
-    href: "/books",
-  },
-  {
-    title: "співпраця",
-    href: "/",
-  },
-  {
-    title: "повернення товару",
-    href: "/anons",
-  },
-  {
-    title: "події",
-    href: "/sale",
-  },
-]);
+const { data: translations } = useNuxtData("translations");
+
+if (!translations.value) {
+  translationsStore.fetchTranslations();
+}
+
+const linksTranslations = computed(() => translationsStore.getFooterLinks);
+const otherTranslations = computed(
+  () => translationsStore.getFooterTranslations
+);
 </script>
 <style scoped>
 .bg-footer-pattern {

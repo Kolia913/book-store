@@ -24,10 +24,20 @@
       </div>
     </div>
 
-    <AtomsAppButton value="КУПИТИ" color="black" class="px-24" />
+    <AtomsAppButton
+      :value="data.button_buy"
+      color="black"
+      class="px-24 uppercase"
+    />
   </div>
 </template>
 <script setup>
+defineProps({
+  data: {
+    type: Object,
+    required: true,
+  },
+});
 const books = ref([
   {
     id: "1",
