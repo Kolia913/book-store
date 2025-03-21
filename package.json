@@ -12,6 +12,7 @@
     "migrate:undo": "npx sequelize-cli db:migrate:undo"
   },
   "dependencies": {
+    "@pinia/nuxt": "^0.10.1",
     "@tailwindcss/vite": "^4.0.10",
     "dotenv": "^16.4.7",
     "joi": "^17.13.3",

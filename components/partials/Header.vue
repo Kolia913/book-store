@@ -108,9 +108,11 @@
     </Transition>
   </nav>
 
-  <Transition name="slide-fade">
-    <PartialsCart v-if="isCartOpen" @close="toggleCart" />
-  </Transition>
+  <ClientOnly>
+    <Transition name="slide-fade">
+      <PartialsCart v-if="isCartOpen" @close="toggleCart" />
+    </Transition>
+  </ClientOnly>
 </template>
 <script setup>
 const route = useRoute();
