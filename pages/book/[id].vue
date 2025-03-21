@@ -9,69 +9,65 @@
         <div
           class="flex flex-row xl:flex-col h-full justify-center gap-9 lg:gap-4 xl:gap-8"
         >
-          <div>
+          <div v-for="img in bookData.images" :key="img">
             <img
-              :src="book.image"
-              class="cursor-pointer xl:max-w-[100px] max-h-[100px]"
-            />
-          </div>
-          <div>
-            <img
-              :src="book.image"
-              class="cursor-pointer xl:max-w-[100px] max-h-[100px]"
-            />
-          </div>
-          <div>
-            <img
-              :src="book.image"
-              class="cursor-pointer xl:max-w-[100px] max-h-[100px]"
-            />
-          </div>
-          <div>
-            <img
-              :src="book.image"
+              :src="img"
               class="cursor-pointer xl:max-w-[100px] max-h-[100px]"
             />
           </div>
         </div>
-        <img :src="book.image" class="w-full max-w-[400px] h-full" />
+        <img :src="bookData.images[0]" class="w-full max-w-[400px] h-full" />
       </div>
       <div class="w-full xl:w-[500px] 2xl:w-[550px] self-start xl:self-center">
-        <div class="app-text-h1 mb-[20px] italic">ОПИС</div>
+        <div class="app-text-h1 mb-[20px] italic">
+          {{ bookData.page_desc_caption }}
+        </div>
         <p class="app-text-small leading-relaxed mt-4 mb-12 lg:mb-0">
-          {{ book.description }}
+          {{ bookData.description }}
         </p>
       </div>
     </div>
     <div
       class="flex flex-col justify-between text-black text-left xl:items-end xl:text-right z-20 mt-8 xl:mt-0"
     >
-      <div class="text-4xl my-[20px] xl:mt-0 xl:text-3xl 2xl:text-5xl italic">
-        Григорій Обертайло <br />
-        <span class="uppercase">'{{ book.title }}'</span>
+      <div class="text-4xl my-[20px] xl:mt-0 xl:text-3xl 2xl:text-4xl italic">
+        {{ bookData.author }} <br />
+        <span class="uppercase">{{ bookData.title }}</span>
       </div>
 
       <div class="flex w-full flex-col md:flex-row xl:flex-col gap-8 xl:gap-4">
         <div class="w-full xl:w-[280px] 2xl:w-[380px] self-end">
           <div class="flex items-center justify-between pb-2">
-            <span class="text-lg italic">в наявності</span>
-            <span class="text-2xl">100 $</span>
+            <span v-if="bookData.is_available" class="text-lg italic"
+              >в наявності</span
+            >
+            <span v-else class="text-lg italic text-primary-red"
+              >немає в наявності</span
+            >
+            <span class="text-2xl">{{ bookData.price }} $</span>
           </div>
           <AtomsAppOutlinedButton
             value="купити"
             color="black"
             class="text-lg w-full uppercase"
+            @click="addToCart(bookData.id)"
           />
         </div>
         <div class="w-full xl:w-[280px] 2xl:w-[380px] self-end">
           <div class="flex items-center justify-between pb-2">
-            <span class="text-lg italic">в наявності</span>
-            <span class="text-2xl">100$</span>
+            <span v-if="bookData.is_available" class="text-lg italic"
+              >в наявності</span
+            >
+            <span v-else class="text-lg italic text-primary-red"
+              >немає в наявності</span
+            >
+            <span class="text-2xl">{{ bookData.price_with_signature }} $</span>
           </div>
           <AtomsAppOutlinedButton
             value="купити з підписом автора"
             color="filled"
             class="text-lg w-full uppercase"
+            @click="addToCart(bookData.id)"
           />
         </div>
       </div>
@@ -81,12 +77,22 @@
 
 <script setup>
 const route = useRoute();
+const cartStore = useCartStore();
 
-const book = computed(() => {
-  try {
-    return JSON.parse(route.query.item || "{}");
-  } catch (e) {
-    return { title: "", description: "", image: "" };
-  }
+const bookId = route.params.id;
+
+const { data: books } = useNuxtData("booksData");
+
+const { data: bookData } = useLazyFetch(`/api/books/${bookId}`, {
+  key: `book-${route.params.id}`,
+  default() {
+    return books.value.find((book) => book.id === bookId);
+  },
 });
+
+const addToCart = (productId) => {
+  cartStore.Item(productId);
+};
+
+console.log("Fetched book data:", bookData.value);
 </script>

@@ -4,7 +4,7 @@
   >
     <!-- Book Cover -->
     <div class="w-full md:w-1/2 flex justify-center">
-      <img :src="item.image" class="w-auto h-auto" />
+      <img :src="item.images[0]" class="w-auto h-auto" />
     </div>
 
     <!-- Book Info -->
@@ -29,28 +29,42 @@
         <AtomsAppOutlinedButton
           value="Більше"
           color="black"
-          @click="
-            $router.push({
-              path: '/book',
-              query: { item: JSON.stringify(item) },
-            })
-          "
+          @click="$router.push(`/book/${item.id}`)"
           class="w-full sm:w-auto"
         />
         <AtomsAppOutlinedButton
           value="Купити"
           color="filled"
           class="w-full sm:w-auto"
+          @click="addToCart(item.id)"
         />
       </div>
     </div>
   </div>
 </template>
+
 <script setup>
+import { useCartStore } from "~/stores/cart";
+
 defineProps({
   item: {
     type: Object,
     required: true,
   },
 });
+
+const cartStore = useCartStore();
+const { $toast } = useNuxtApp();
+
+const addToCart = (productId) => {
+  try {
+    cartStore.addItem(productId);
+    $toast.success("Додано до корзини! 😁", {
+      autoClose: 1000,
+    });
+  } catch (error) {
+    console.error("Error adding item to cart:", error);
+    $toast.error("Не вдалося додати до корзини.");
+  }
+};
 </script>
