@@ -4,9 +4,13 @@
     id="sale"
     v-if="books.length > 0"
   >
-    <IconsIconLightning2 class="absolute right-[-270px] bottom-[-280px]" />
-    <IconsIconLightning3 class="absolute left-[-220px] bottom-[-10px]" />
-    <div class="app-text-h1 text-center">
+    <IconsIconLightning2
+      class="absolute right-[-370px] bottom-[780px] lg:right-[-270px] lg:bottom-[-280px]"
+    />
+    <IconsIconLightning3
+      class="absolute left-[-320px] bottom-[310px] lg:left-[-220px] md:bottom-[-10px]"
+    />
+    <div class="app-text-h1 text-center z-2">
       отримай <span class="text-primary-red">-10%</span> на ці книги
     </div>
     <div
@@ -41,28 +45,28 @@ defineProps({
 const books = ref([
   {
     id: "1",
-    image: "/images/book1.png",
+    image: "/uploads/book1.png",
     title: "Скепсис",
     price: 90,
     oldPrice: 100,
   },
   {
     id: "2",
-    image: "/images/book1.png",
+    image: "/uploads/book1.png",
     title: "Скепсис",
     price: 90,
     oldPrice: 100,
   },
   {
     id: "3",
-    image: "/images/book1.png",
+    image: "/uploads/book1.png",
     title: "Скепсис",
     price: 90,
     oldPrice: 100,
   },
   {
     id: "4",
-    image: "/images/book1.png",
+    image: "/uploads/book1.png",
     title: "Скепсис",
     price: 90,
     oldPrice: 100,

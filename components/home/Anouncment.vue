@@ -15,7 +15,7 @@
       <div
         class="absolute lg:relative flex right-6 lg:right-0 justify-center w-[400px] lg:w-full lg:h-full items-center z-0"
       >
-        <img src="/images/announcment.png" class="w-auto h-auto" />
+        <img src="/uploads/announcment.png" class="w-auto h-auto" />
       </div>
 
       <!-- Right Block (Text Right-Aligned) -->

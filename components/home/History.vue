@@ -4,7 +4,7 @@
     id="story"
   >
     <div class="flex-1">
-      <img src="/images/history.png" class="w-auto h-auto object-fit" />
+      <img src="/uploads/history.png" class="w-auto h-auto object-fit" />
     </div>
 
     <div class="flex flex-col justify-between px-[32px] flex-1 min-h-[100%]">

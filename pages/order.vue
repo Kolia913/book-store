@@ -8,7 +8,7 @@
     <div class="md:w-[70%] flex flex-col gap-4">
       <!-- Контактні дані -->
       <div
-        class="md:col-span-6 order-2 md:order-none h-[470px] sm:h-[520px] xl:h-[300px] bg-white rounded-3.5xl relative p-4 sm:p-6 md:py-12 md:pt-5"
+        class="md:col-span-6 order-2 md:order-none h-[470px] sm:h-[520px] xl:h-[300px] bg-[#E9E9E9] rounded-3.5xl relative p-4 sm:p-6 md:py-12 md:pt-5"
       >
         <div
           class="absolute z-50 top-3 left-4 sm:left-6 app-text-block-heading"
@@ -34,7 +34,7 @@
           <AtomsAppPhoneInput
             v-model="phone"
             label="Номер телефону"
-            type="phone"
+            type="tel"
             placeholder="Введіть ваш номер телефону"
           />
           <AtomsAppInput
@@ -48,11 +48,11 @@
 
       <!-- Кошик -->
       <div
-        class="md:col-span-4 md:hidden order-1 md:order-none h-fit bg-white rounded-3.5xl relative p-4 sm:p-6 md:py-4 md:pt-5"
+        class="md:col-span-4 md:hidden order-1 md:order-none h-fit bg-[#E9E9E9] rounded-3.5xl relative p-4 sm:p-6 md:py-4 md:pt-5"
       >
         <div class="flex flex-col justify-between h-full">
           <div
-            class="absolute z-50 top-3 left-4 pb-2 sm:left-6 bg-white w-[200px] app-text-block-heading"
+            class="absolute z-50 top-3 left-4 pb-2 sm:left-6 bg-[#E9E9E9] w-[200px] app-text-block-heading"
           >
             1 товар у кошику
           </div>
@@ -60,7 +60,7 @@
             <div
               class="flex gap-6 md:flex-col lg:flex-row md:items-center md:pb-4 md:border-b lg:border-none"
             >
-              <img src="/images/book1.png" class="w-[80px] sm:w-[120px]" />
+              <img src="/uploads/book1.png" class="w-[80px] sm:w-[120px]" />
               <div class="flex w-full justify-between">
                 <div>
                   <div>Книга</div>
@@ -75,7 +75,7 @@
             <div
               class="flex gap-6 md:flex-col lg:flex-row md:items-center md:pb-4 md:border-b lg:border-none"
             >
-              <img src="/images/book1.png" class="w-[80px] sm:w-[120px]" />
+              <img src="/uploads/book1.png" class="w-[80px] sm:w-[120px]" />
               <div class="flex w-full justify-between">
                 <div>
                   <div>Книга</div>
@@ -96,7 +96,7 @@
 
       <!-- Доставка -->
       <div
-        class="md:col-span-6 h-[370px] order-2 md:order-none sm:h-[300px] md:h-[280px] bg-white rounded-3.5xl relative p-4 sm:p-6 md:pt-5"
+        class="md:col-span-6 h-[370px] order-2 md:order-none sm:h-[300px] md:h-[280px] bg-[#E9E9E9] rounded-3.5xl relative p-4 sm:p-6 md:pt-5"
       >
         <div
           class="absolute z-50 top-3 left-4 sm:left-6 app-text-block-heading"
@@ -110,23 +110,30 @@
             v-model="country"
             label="Країна"
             :options="countries"
+            placeholder="Введіть вашу країну"
           />
-          <AtomsAppSelect v-model="city" label="Місто" :options="cities" />
+          <AtomsAppSelect
+            v-model="city"
+            label="Місто"
+            :options="cities"
+            placeholder="Введіть ваше місто"
+          />
           <AtomsAppSelect
             v-model="delivery"
             label="Спосіб доставки"
             :options="deliveryTypes"
             class="sm:col-span-2"
+            placeholder="Введіть тип доставки"
           />
         </div>
       </div>
 
       <!-- Підтвердити замовлення -->
       <div
-        class="md:col-span-4 md:hidden order-3 md:order-none h-fit bg-white rounded-3.5xl p-4 sm:p-8"
+        class="md:col-span-4 md:hidden order-3 md:order-none h-fit bg-[#E9E9E9] rounded-3.5xl p-4 sm:p-8"
       >
         <div class="flex flex-col justify-center items-center gap-4">
-          <AtomsAppButton value="Підтвердити замовлення" color="green" />
+          <AtomsAppButton value="Підтвердити замовлення" color="black" />
           <div class="text-center cursor-pointer hover:underline">
             Продовжити покупки
           </div>
@@ -135,7 +142,7 @@
 
       <!-- Спосіб оплати -->
       <div
-        class="md:col-span-6 order-2 md:order-none h-[230px] bg-white rounded-3.5xl relative p-4 sm:p-6 md:pt-6"
+        class="md:col-span-6 order-2 md:order-none h-[230px] bg-[#E9E9E9] rounded-3.5xl relative p-4 sm:p-6 md:pt-6"
       >
         <div
           class="absolute z-50 top-3 left-4 sm:left-6 app-text-block-heading"
@@ -160,11 +167,11 @@
     </div>
     <div class="hidden md:w-[30%] md:flex flex-col gap-4">
       <div
-        class="md:col-span-4 order-1 md:order-none h-fit bg-white rounded-3.5xl relative p-4 sm:p-6 md:py-4 md:pt-5"
+        class="md:col-span-4 order-1 md:order-none h-fit bg-[#E9E9E9] rounded-3.5xl relative p-4 sm:p-6 md:py-4 md:pt-5"
       >
         <div class="flex flex-col justify-between h-full">
           <div
-            class="absolute z-50 top-3 left-4 pb-2 sm:left-6 bg-white w-[200px] app-text-block-heading"
+            class="absolute z-50 top-3 left-4 pb-2 sm:left-6 bg-[#E9E9E9] w-[200px] app-text-block-heading"
           >
             1 товар у кошику
           </div>
@@ -172,7 +179,7 @@
             <div
               class="flex gap-6 md:flex-col lg:flex-row md:items-center md:pb-4 md:border-b lg:border-none"
             >
-              <img src="/images/book1.png" class="w-[80px] sm:w-[120px]" />
+              <img src="/uploads/book1.png" class="w-[80px] sm:w-[120px]" />
               <div class="flex w-full justify-between">
                 <div>
                   <div>Книга</div>
@@ -187,7 +194,7 @@
             <div
               class="flex gap-6 md:flex-col lg:flex-row md:items-center md:pb-4 md:border-b lg:border-none"
             >
-              <img src="/images/book1.png" class="w-[80px] sm:w-[120px]" />
+              <img src="/uploads/book1.png" class="w-[80px] sm:w-[120px]" />
               <div class="flex w-full justify-between">
                 <div>
                   <div>Книга</div>
@@ -207,12 +214,12 @@
       </div>
       <!-- Підтвердити замовлення -->
       <div
-        class="md:col-span-4 order-3 md:order-none h-fit bg-white rounded-3.5xl p-4 sm:p-8"
+        class="md:col-span-4 order-3 md:order-none h-fit bg-[#E9E9E9] rounded-3.5xl p-4 sm:p-8"
       >
         <div class="flex flex-col justify-center items-center gap-4">
           <AtomsAppButton
             value="Підтвердити замовлення"
-            color="green"
+            color="black"
             @click="handleOrder"
           />
           <div
@@ -313,5 +320,10 @@ const deliveryTypes = ref([
 .v-enter-from,
 .v-leave-to {
   opacity: 0;
+}
+
+div {
+  font-family: Inter;
+  font-weight: 600;
 }
 </style>

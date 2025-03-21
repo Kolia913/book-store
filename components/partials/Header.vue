@@ -39,6 +39,7 @@
       value="Кошик"
       @click="toggleCart"
       :color="isNavWhite ? 'white' : 'red'"
+      class="relative"
     >
       <template #icon>
         <IconsCart />
@@ -92,7 +93,7 @@
           value="Кошик"
           @click="toggleCart"
           color="red"
-          class="w-full mt-4"
+          class="w-full mt-4 relative"
         >
           <template #icon>
             <div

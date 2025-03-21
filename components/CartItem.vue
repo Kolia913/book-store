@@ -1,8 +1,8 @@
 <template>
+
   <div class="flex justify-between h-fit items-start p-4">
     <div class="flex flex-row items-start gap-4">
       <img :src="item.image" alt="Book cover" class="w-40" />
-
       <div>
         <div class="app-text-body uppercase italic xl:mr-2">
           {{ item.title }}
