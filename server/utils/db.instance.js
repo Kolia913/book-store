@@ -16,4 +16,17 @@ if (config.use_env_variable) {
   );
 }
 
+const models = [];
+
+sequelize.Sequelize.addHook("afterDefine", (model) => {
+  console.log("Define model", model.name);
+  models.push(model);
+});
+
+sequelize.Sequelize.addHook("beforeFind", () => {
+  models.forEach((model) => {
+    model.associate(models);
+  });
+});
+
 export { sequelize, Sequelize };
