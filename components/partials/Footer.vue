@@ -58,12 +58,6 @@
 <script setup>
 const translationsStore = useTranslationsStore();
 
-const { data: translations } = useNuxtData("translations");
-
-if (!translations.value) {
-  translationsStore.fetchTranslations();
-}
-
 const linksTranslations = computed(() => translationsStore.getFooterLinks);
 const otherTranslations = computed(
   () => translationsStore.getFooterTranslations

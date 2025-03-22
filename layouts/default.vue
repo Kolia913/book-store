@@ -10,9 +10,5 @@ const translationsPromise = useAsyncData("translationsData", () => {
   return translationsStore.fetchTranslations();
 });
 
-const pagesPromise = useAsyncData("pages", () => {
-  return pagesStore.fetchPages();
-});
-
-await Promise.all([translationsPromise, pagesPromise]);
+await Promise.all([translationsPromise]);
 </script>

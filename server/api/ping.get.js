@@ -1,3 +1,3 @@
-defineEventHandler(async (_event) => {
+export default defineEventHandler(async (_event) => {
   return { message: "pong" };
 });

@@ -3,16 +3,7 @@ export const usePageStore = defineStore("pages", {
     pages: {},
   }),
   actions: {
-    async fetchPages() {
-      try {
-        const res = await $fetch("/api/pages");
-        this.pages = res;
-        return res;
-      } catch (error) {
-        throw error;
-      }
-    },
-    async fetchPageByKet(key) {
+    async fetchPageByKey(key) {
       try {
         const res = await $fetch(`/api/pages/web/${key}`);
         return res;

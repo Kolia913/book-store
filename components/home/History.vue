@@ -4,7 +4,7 @@
     id="story"
   >
     <div class="flex-1">
-      <img src="/uploads/history.png" class="w-auto h-auto object-fit" />
+      <img :src="pageData?.image?.value" class="w-auto h-auto object-fit" />
     </div>
 
     <div class="flex flex-col justify-between px-[32px] flex-1 min-h-[100%]">
@@ -12,19 +12,13 @@
         <h2
           class="app-text-h1 pb-[10px] sm:pb-[20px] lg:pb-[10px] xl:pb-[30px]"
         >
-          Моя історія
+          {{ pageData?.title?.value }}
         </h2>
-        <p class="text-wrap app-text-body font-normal">
-          Явився я на світ Божий останнього місяця сімдесят шостого року
-          двадцятого сторіччя – саме тоді, коли зародились перші бактерії з
-          водоростями. Тоді бронтозаври чубились зі стегозаврами за володіння
-          найвигіднішими галявинами, порослими древньою соковитою травичкою, а
-          безсердні шаблезубі тигри тільки й дивились, як зʼїсти переможця тої
-          борні – це я написав для прикладу, аби поколінню міленіалів було
-          зрозуміліше.
-          <br /><br />
-          Для старшого сегменту й так ясно, що народився я в часи розквіту тричі
-          клятого вошивого «совка», най би його шляки трафили.
+        <p
+          class="text-wrap app-text-body font-normal"
+          style="text-align: justify"
+        >
+          {{ pageData?.description?.value }}
         </p>
       </div>
 
@@ -40,6 +34,10 @@
 <script setup>
 defineProps({
   data: {
+    type: Object,
+    required: true,
+  },
+  pageData: {
     type: Object,
     required: true,
   },
