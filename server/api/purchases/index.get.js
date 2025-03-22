@@ -1,17 +1,8 @@
 import { Purchase } from "~/server/database/models/Purchase";
-import { Customer } from "~/server/database/models/Customer";
 
 export default defineEventHandler(async (event) => {
   try {
-    sequelize.models.forEach((model) => {
-      model.associate(sequelize.models);
-    });
-    const purchases = await Purchase.findAll({
-      include: {
-        model: Customer,
-        required: false,
-      },
-    });
+    const purchases = await Purchase.findAll({});
     return purchases.map((item) => ({
       ...item.dataValues,
       cart_data:

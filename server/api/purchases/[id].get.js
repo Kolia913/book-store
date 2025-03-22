@@ -3,10 +3,6 @@ import { Customer } from "~/server/database/models/Customer";
 
 export default defineEventHandler(async (event) => {
   try {
-    sequelize.models.forEach((model) => {
-      model.associate(sequelize.models);
-    });
-
     const id = getRouterParam(event, "id");
     if (!id || isNaN(Number(+id))) {
       setResponseStatus(event, 400);
@@ -19,11 +15,12 @@ export default defineEventHandler(async (event) => {
 
     const purchase = await Purchase.findOne({
       where: { id: +id },
-      include: {
-        model: Customer,
-        required: false,
-      },
     });
+
+    const customer = await Customer.findOne({
+      where: { id: purchase.customer_id },
+    });
+
     if (!purchase) {
       setResponseStatus(event, 404);
       return createError({
@@ -35,6 +32,11 @@ export default defineEventHandler(async (event) => {
 
     return {
       ...purchase.dataValues,
+      customer: customer
+        ? {
+            ...customer.dataValues,
+          }
+        : null,
       cart_data: JSON.parse(purchase.cart_data),
       delivery_data: JSON.parse(purchase.delivery_data),
     };
