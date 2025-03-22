@@ -60,42 +60,30 @@
           <div
             class="absolute z-50 top-3 left-4 pb-2 sm:left-6 bg-[#E9E9E9] w-[200px] app-text-block-heading"
           >
-            1 {{ pageData?.content?.cart?.singular_cart_quantity }}
+            {{ cartForOrder?.length }}
+            {{ pageData?.content?.cart?.singular_cart_quantity.value }}
           </div>
           <div class="flex flex-col pt-12 gap-6 overflow-y-auto">
             <div
+              v-for="item in cartForOrder"
+              :key="item.id"
               class="flex gap-6 md:flex-col lg:flex-row md:items-center md:pb-4 md:border-b lg:border-none"
             >
-              <img src="/uploads/book1.png" class="w-[80px] sm:w-[120px]" />
+              <img :src="item.image" class="w-[80px] sm:w-[120px]" />
               <div class="flex w-full justify-between">
                 <div>
-                  <div>Книга</div>
+                  <div class="app-text-body uppercase">{{ item.title }}</div>
                   <p>Автор</p>
                   <br />
-                  100$
+                  {{ item.cost / item.quantity }} ₴
                   <p class="text-[#ABE19D]">в наявності</p>
                 </div>
-                <p>1 шт.</p>
-              </div>
-            </div>
-            <div
-              class="flex gap-6 md:flex-col lg:flex-row md:items-center md:pb-4 md:border-b lg:border-none"
-            >
-              <img src="/uploads/book1.png" class="w-[80px] sm:w-[120px]" />
-              <div class="flex w-full justify-between">
-                <div>
-                  <div>Книга</div>
-                  <p>Автор</p>
-                  <br />
-                  100$
-                  <p class="text-[#ABE19D]">в наявності</p>
-                </div>
-                <p>1 шт.</p>
+                <p>{{ item.quantity }} шт.</p>
               </div>
             </div>
           </div>
           <div class="pt-4 md:pt-0 app-text-block-heading">
-            {{ pageData?.content?.cart?.total }} 100$
+            {{ pageData?.content?.cart?.total.value }} {{ total }}₴
           </div>
         </div>
       </div>
@@ -171,13 +159,13 @@
           <AtomsAppRadioInput
             v-model="formData.payment"
             label="Apple pay"
-            value="apple-pay"
+            value="Онлайн оплата"
             name="payment-method"
           />
           <AtomsAppRadioInput
             v-model="formData.payment"
             :label="pageData?.content?.payment_data?.on_delivery?.value"
-            value="cash-on-delivery"
+            value="Готівкою при отриманні"
             name="payment-method"
           />
           <div v-if="errors.payment" class="text-red-500 text-sm">
@@ -194,42 +182,30 @@
           <div
             class="absolute z-50 top-3 left-4 pb-2 sm:left-6 bg-[#E9E9E9] w-[200px] app-text-block-heading"
           >
-            1
+            {{ cartForOrder?.length }}
+            {{ pageData?.content?.cart?.singular_cart_quantity.value }}
           </div>
-          <div class="flex flex-col pt-12 gap-6 overflow-y-auto">
+          <div class="flex flex-col pt-12 gap-4 overflow-y-auto">
             <div
-              class="flex gap-6 md:flex-col lg:flex-row md:items-center md:pb-4 md:border-b lg:border-none"
+              v-for="item in cartForOrder"
+              :key="item.id"
+              class="flex gap-4 md:flex-col lg:flex-row md:items-start md:pb-4 md:border-b lg:border-none"
             >
-              <img src="/uploads/book1.png" class="w-[80px] sm:w-[120px]" />
+              <img :src="item.image" class="w-[80px] sm:w-[120px]" />
               <div class="flex w-full justify-between">
                 <div>
-                  <div>Книга</div>
+                  <div class="uppercase">{{ item.title }}</div>
                   <p>Автор</p>
                   <br />
-                  100$
+                  {{ item.cost / item.quantity }} ₴
                   <p class="text-[#ABE19D]">в наявності</p>
                 </div>
-                <p>1 шт.</p>
-              </div>
-            </div>
-            <div
-              class="flex gap-6 md:flex-col lg:flex-row md:items-center md:pb-4 md:border-b lg:border-none"
-            >
-              <img src="/uploads/book1.png" class="w-[80px] sm:w-[120px]" />
-              <div class="flex w-full justify-between">
-                <div>
-                  <div>Книга</div>
-                  <p>Автор</p>
-                  <br />
-                  100$
-                  <p class="text-[#ABE19D]">в наявності</p>
-                </div>
-                <p>1 шт.</p>
+                <p>{{ item.quantity }} шт.</p>
               </div>
             </div>
           </div>
           <div class="pt-4 md:pt-0 app-text-block-heading">
-            {{ pageData?.content?.cart?.total?.value }} 100$
+            {{ pageData?.content?.cart?.total?.value }} {{ total }}₴
           </div>
         </div>
       </div>
@@ -264,7 +240,17 @@ const pageStore = usePageStore();
 const { data: pageData } = await useAsyncData("pagesData", () => {
   return pageStore.fetchPageByKey("checkout");
 });
-
+const { $toast } = useNuxtApp();
+const cartForOrder = ref([]);
+onMounted(() => {
+  const cartData = localStorage.getItem("cartForOrder");
+  if (cartData) {
+    cartForOrder.value = JSON.parse(cartData);
+  }
+});
+const total = computed(() => {
+  return cartForOrder.value.reduce((sum, item) => sum + item.cost, 0);
+});
 const formData = reactive({
   name: "",
   surname: "",
@@ -337,13 +323,61 @@ const validateForm = () => {
 
   return isValid;
 };
+const npStore = useNPStore();
 
-const handleOrder = () => {
-  if (validateForm()) {
-    console.log("Form submitted with values:", formData);
+const { data: settlements } = await useAsyncData("settlements", () => {
+  return npStore.fetchSettlements();
+});
+console.log(settlements.value);
+const handleOrder = async () => {
+  if (!validateForm()) {
+    return;
+  }
+  try {
+    const { data: userData } = await useAsyncData(() =>
+      $fetch("/api/customers", {
+        method: "POST",
+        body: JSON.stringify({
+          phone: formData.phone,
+          name: formData.name,
+          surname: formData.surname,
+          email: formData.email,
+        }),
+      })
+    );
+    const cartData = cartForOrder.value.map((item) => ({
+      book_id: item.id,
+      qty: item.quantity,
+    }));
+
+    const { data: purchaseResponse } = await useAsyncData(() =>
+      $fetch("/api/purchases", {
+        method: "POST",
+        body: {
+          payment_type: formData.payment,
+          customer_id: userData.value.customer.id,
+          cart_data: cartData,
+          total: total.value,
+          delivery_data: {
+            country: formData.country,
+            city: formData.city,
+            type: formData.delivery,
+          },
+        },
+      })
+    );
+
     showSuccessModal.value = true;
+    localStorage.removeItem("cartForOrder");
+    cartForOrder.value = [];
+  } catch (error) {
+    console.error("Error creating user or placing order:", error);
+    $toast.error(
+      "Помилка при створенні користувача або оформленні замовлення."
+    );
   }
 };
+
 watch(showSuccessModal, (newVal) => {
   if (newVal) {
     document.body.style.overflow = "hidden";

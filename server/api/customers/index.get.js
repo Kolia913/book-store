@@ -1,6 +1,6 @@
 import { Customer } from "~/server/database/models/Customer";
 
-export default defineEventHandler(async (_event) => {
+export default defineEventHandler(async (event) => {
   try {
     const customers = await Customer.findAll();
     return customers;

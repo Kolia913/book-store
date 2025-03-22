@@ -44,7 +44,7 @@
             <span v-else class="text-lg italic text-primary-red"
               >немає в наявності</span
             >
-            <span class="text-2xl">{{ bookData.price }} $</span>
+            <span class="text-2xl">{{ bookData.price }} ₴</span>
           </div>
           <AtomsAppOutlinedButton
             value="купити"
@@ -61,13 +61,12 @@
             <span v-else class="text-lg italic text-primary-red"
               >немає в наявності</span
             >
-            <span class="text-2xl">{{ bookData.price_with_signature }} $</span>
+            <span class="text-2xl">{{ bookData.price_with_signature }} ₴</span>
           </div>
           <AtomsAppOutlinedButton
             value="купити з підписом автора"
             color="filled"
             class="text-lg w-full uppercase"
-            @click="addToCart(bookData.id)"
           />
         </div>
       </div>

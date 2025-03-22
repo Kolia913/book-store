@@ -2,7 +2,7 @@
   <div class="relative w-full h-fit">
     <img
       :src="translations?.content?.banner?.image?.value"
-      class="w-full h-auto object-cover"
+      class="w-full h-auto max-h-[100vh] object-cover"
     />
     <div
       class="absolute flex flex-col sm:flex-row-reverse justify-center items-center gap-4 text-white bottom-4 w-[250px] sm:w-[320px] md:w-[460px] px-4 sm:px-6 md:px-8 lg:bottom-6 lg:w-[760px] lg:mb-8"
