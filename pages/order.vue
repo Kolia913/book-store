@@ -90,7 +90,7 @@
 
       <!-- Доставка -->
       <div
-        class="md:col-span-6 h-[370px] order-2 md:order-none sm:h-[300px] md:h-[280px] bg-[#E9E9E9] rounded-3.5xl relative p-4 sm:p-6 md:pt-5"
+        class="md:col-span-6 order-2 md:order-none md:h-fit bg-[#E9E9E9] rounded-3.5xl relative p-4 sm:p-6 md:pt-5"
       >
         <div
           class="absolute z-50 top-3 left-4 sm:left-6 app-text-block-heading"
@@ -104,6 +104,8 @@
             v-model="formData.country"
             :label="pageData?.content?.delivery_data?.country?.value"
             :options="countries"
+            labelKey="label"
+            valueKey="label"
             :placeholder="pageData?.content?.delivery_data?.country?.value"
             required
             :error="errors.country"
@@ -111,14 +113,20 @@
           <AtomsAppSelect
             v-model="formData.city"
             :label="pageData?.content?.delivery_data?.city?.value"
+            labelKey="Present"
+            valueKey="Present"
             :options="cities"
             :placeholder="pageData?.content?.delivery_data?.city?.value"
             required
             :error="errors.city"
+            @search="fetchCities"
+            @input="handleCitySelect"
           />
           <AtomsAppSelect
             v-model="formData.delivery"
             :label="pageData?.content?.delivery_data?.delivery_type?.value"
+            labelKey="label"
+            valueKey="label"
             :options="deliveryTypes"
             class="sm:col-span-2"
             :placeholder="
@@ -126,6 +134,19 @@
             "
             required
             :error="errors.delivery"
+          />
+          <AtomsAppSelect
+            v-if="formData.delivery === 'Нова пошта'"
+            v-model="formData.warehouse"
+            label="Виберіть відділеня/поштомат"
+            labelKey="Description"
+            valueKey="Description"
+            :options="warehouses"
+            class="sm:col-span-2"
+            placeholder="Відділеня/Поштомат"
+            required
+            :error="errors.warehouse"
+            @search="fetchWarehouses(formData.settlementRef, $event)"
           />
         </div>
       </div>
@@ -237,17 +258,23 @@
 <script setup>
 const showSuccessModal = ref(false);
 const pageStore = usePageStore();
+const cities = ref([]);
+const warehouses = ref([]);
+const npStore = useNPStore();
+
 const { data: pageData } = await useAsyncData("pagesData", () => {
   return pageStore.fetchPageByKey("checkout");
 });
 const { $toast } = useNuxtApp();
 const cartForOrder = ref([]);
+
 onMounted(() => {
   const cartData = localStorage.getItem("cartForOrder");
   if (cartData) {
     cartForOrder.value = JSON.parse(cartData);
   }
 });
+
 const total = computed(() => {
   return cartForOrder.value.reduce((sum, item) => sum + item.cost, 0);
 });
@@ -258,6 +285,7 @@ const formData = reactive({
   email: "",
   country: "",
   city: "",
+  settlementRef: "",
   delivery: "",
   payment: "",
 });
@@ -320,17 +348,69 @@ const validateForm = () => {
     errors.payment = "Спосіб оплати обов'язковий";
     isValid = false;
   }
+  if (!formData.warehouse) {
+    errors.warehouse = "Відділеня/Поштомат обов'язковий";
+    isValid = false;
+  }
 
   return isValid;
 };
-const npStore = useNPStore();
+const handleCitySelect = (selectedCity) => {
+  formData.city = selectedCity.Present;
+  formData.settlementRef = selectedCity.SettlementRef;
+  console.log(formData.settlementRef);
+  console.log(formData.settlementRef);
+};
 
-const { data: settlements } = await useAsyncData("settlements", () => {
-  return npStore.fetchSettlements();
-});
-console.log(settlements.value);
+const fetchCities = async (query) => {
+  if (query.length < 2) return;
+
+  try {
+    const response = await npStore.fetchSettlements(query);
+
+    if (
+      response?.success &&
+      Array.isArray(response.data) &&
+      response.data.length > 0
+    ) {
+      cities.value = response.data[0].Addresses.map((city) => ({
+        Present: city.Present,
+      }));
+    } else {
+      console.error("Invalid API response:", response);
+      cities.value = [];
+    }
+  } catch (error) {
+    console.error("Error fetching cities:", error);
+    cities.value = [];
+  }
+};
+
+const fetchWarehouses = async (settlementRef, query) => {
+  try {
+    const response = await npStore.fetchWarehouses(settlementRef, query);
+
+    if (
+      response?.success &&
+      Array.isArray(response.data) &&
+      response.data.length > 0
+    ) {
+      warehouses.value = response.data.map((warehouse) => ({
+        Description: warehouse.Description,
+      }));
+    } else {
+      console.error("Invalid API response:", response);
+      warehouses.value = [];
+    }
+  } catch (error) {
+    console.error("Error fetching cities:", error);
+    warehouses.value = [];
+  }
+};
+
 const handleOrder = async () => {
   if (!validateForm()) {
+    $toast.warning("Заповніть всі обов'язкові поля");
     return;
   }
   try {
@@ -356,12 +436,19 @@ const handleOrder = async () => {
         body: {
           payment_type: formData.payment,
           customer_id: userData.value.customer.id,
+          customer_data: {
+            name: userData.value.customer.name,
+            surname: userData.value.customer.surname,
+            phone: userData.value.customer.phone,
+            email: userData.value.customer.email,
+          },
           cart_data: cartData,
           total: total.value,
           delivery_data: {
             country: formData.country,
             city: formData.city,
             type: formData.delivery,
+            warehouse: formData.warehouse,
           },
         },
       })
@@ -369,6 +456,7 @@ const handleOrder = async () => {
 
     showSuccessModal.value = true;
     localStorage.removeItem("cartForOrder");
+
     cartForOrder.value = [];
   } catch (error) {
     console.error("Error creating user or placing order:", error);
@@ -386,32 +474,18 @@ watch(showSuccessModal, (newVal) => {
   }
 });
 
+watch(
+  () => formData.city,
+  (newCity) => {
+    if (newCity) {
+      npStore.fetchSettlements(newCity);
+    }
+  }
+);
 onUnmounted(() => {
   document.body.style.overflow = "";
 });
 
-const cities = ref([
-  {
-    label: "Київ",
-    id: "kyiv",
-  },
-  {
-    label: "Львів",
-    id: "lviv",
-  },
-  {
-    label: "Хмельницький",
-    id: "khmelnytskyi",
-  },
-  {
-    label: "Володимир",
-    id: "volodymyr",
-  },
-  {
-    label: "Вінниця",
-    id: "vinnytsia",
-  },
-]);
 const countries = ref([
   {
     label: "Україна",
@@ -420,18 +494,6 @@ const countries = ref([
   {
     label: "Польща",
     id: "poland",
-  },
-  {
-    label: "Німеччина",
-    id: "germany",
-  },
-  {
-    label: "Франція",
-    id: "france",
-  },
-  {
-    label: "Італія",
-    id: "italy",
   },
 ]);
 const deliveryTypes = ref([

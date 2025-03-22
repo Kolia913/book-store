@@ -41,7 +41,7 @@
       :color="isNavWhite ? 'white' : 'red'"
       class="relative"
       :class="{
-        'filter grayscale-[100%] pointer-events-none': $route.path === '/order',
+        invisible: $route.path === '/order',
       }"
     >
       <template #icon>
@@ -116,7 +116,7 @@
   <ClientOnly>
     <Transition name="slide-fade">
       <PartialsCart
-        v-if="isCartOpen && $route.path !== '/order'"
+        v-if="isCartOpen && route.path !== '/order'"
         @close="toggleCart"
       />
     </Transition>

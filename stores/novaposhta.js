@@ -3,7 +3,7 @@ export const useNPStore = defineStore("novapost", {
     settlements: {},
   }),
   actions: {
-    async fetchSettlements() {
+    async fetchSettlements(cityName) {
       try {
         const res = await $fetch("https://api.novaposhta.ua/v2.0/json/", {
           method: "POST",
@@ -12,7 +12,7 @@ export const useNPStore = defineStore("novapost", {
             modelName: "AddressGeneral",
             calledMethod: "searchSettlements",
             methodProperties: {
-              CityName: "Чемерівці",
+              CityName: cityName,
               Page: "1",
               Limit: "10",
               Language: "UA",
@@ -25,7 +25,7 @@ export const useNPStore = defineStore("novapost", {
         throw error;
       }
     },
-    async fetchWarehouses() {
+    async fetchWarehouses(cityRef, warehouseNum) {
       try {
         const res = await $fetch("https://api.novaposhta.ua/v2.0/json/", {
           method: "POST",
@@ -34,8 +34,8 @@ export const useNPStore = defineStore("novapost", {
             modelName: "AddressGeneral",
             calledMethod: "getWarehouses",
             methodProperties: {
-              FindByString: "№1",
-              SettlementRef: "e71abb60-4b33-11e4-ab6d-005056801329",
+              FindByString: warehouseNum,
+              SettlementRef: cityRef,
               Page: "1",
               Limit: "10",
               Language: "UA",
