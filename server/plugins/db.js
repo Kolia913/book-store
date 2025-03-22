@@ -7,8 +7,8 @@ export default defineNitroPlugin(async (_nitro) => {
     await sequelize.authenticate();
     consola.success("Connection has been established successfully.");
 
-    const PurchaseM = Purchase(sequelize, Sequelize.DataTypes);
-    const CustomerM = Customer(sequelize, Sequelize.DataTypes);
+    const PurchaseM = new Purchase(sequelize, Sequelize.DataTypes);
+    const CustomerM = new Customer(sequelize, Sequelize.DataTypes);
 
     const models = { Purchase: PurchaseM, Customer: CustomerM };
 
