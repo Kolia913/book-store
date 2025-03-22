@@ -16,6 +16,7 @@ export default defineEventHandler(async (event) => {
           : item.delivery_data,
     }));
   } catch (err) {
+    console.log("err", err);
     setResponseStatus(event, 500);
     const error = createError({
       message: "Something went wrong",
