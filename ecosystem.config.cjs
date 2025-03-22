@@ -2,10 +2,13 @@ module.exports = {
   apps: [
     {
       name: "Obert_Book_Store",
-      port: 3000,
       exec_mode: "cluster",
-      instances: "max",
+      instances: 1,
       script: "./.output/server/index.mjs",
+      env: {
+        PORT: 3000,
+        NODE_ENV: "production",
+      },
     },
   ],
 };
