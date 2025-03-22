@@ -1,10 +1,12 @@
 import { Purchase } from "~/server/database/models/Purchase";
 import { Customer } from "~/server/database/models/Customer";
 
-Purchase.associate([Customer]);
-
 export default defineEventHandler(async (event) => {
   try {
+    sequelize.models.forEach((model) => {
+      model.associate(sequelize.models);
+    });
+
     const id = getRouterParam(event, "id");
     if (!id || isNaN(Number(+id))) {
       setResponseStatus(event, 400);

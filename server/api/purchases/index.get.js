@@ -3,6 +3,9 @@ import { Customer } from "~/server/database/models/Customer";
 
 export default defineEventHandler(async (event) => {
   try {
+    sequelize.models.forEach((model) => {
+      model.associate(sequelize.models);
+    });
     const purchases = await Purchase.findAll({
       include: {
         model: Customer,
