@@ -68,7 +68,10 @@ export default defineEventHandler(async (event) => {
       }).toJSON();
     }
 
-    const oldContent = JSON.parse(existingPage.content);
+    const oldContent =
+      typeof existingPage.content === "string"
+        ? JSON.parse(existingPage.content)
+        : existingPage.content;
     const newData = adjustWithTypes({ ...data, content });
 
     // Extract and delete old images
@@ -95,7 +98,10 @@ export default defineEventHandler(async (event) => {
       ...value,
       content: JSON.parse(value.content),
     });
-    existingPage.content = JSON.parse(existingPage.content);
+    existingPage.content =
+      typeof existingPage.content === "string"
+        ? JSON.parse(existingPage.content)
+        : existingPage.content;
     updateNestedObject(existingPage, flatNewData);
 
     // Save updated page
@@ -104,9 +110,13 @@ export default defineEventHandler(async (event) => {
     });
 
     setResponseStatus(event, 200);
-    existingPage.content = JSON.parse(existingPage.content);
+    existingPage.content =
+      typeof existingPage.content === "string"
+        ? JSON.parse(existingPage.content)
+        : existingPage.content;
     return existingPage;
   } catch (err) {
+    console.log(err);
     setResponseStatus(event, 500);
     bulkRemoveFiles(newImages);
     return createError({

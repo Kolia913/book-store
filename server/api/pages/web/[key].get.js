@@ -15,6 +15,9 @@ export default defineEventHandler(async (event) => {
     }
 
     setResponseStatus(event, 200);
+    if (typeof page.content === "string") {
+      page.content = JSON.parse(page.content);
+    }
     return page;
   } catch (err) {
     setResponseStatus(event, 500);
