@@ -5,19 +5,22 @@
       <span class="text-red-500">*</span>
     </label>
     <div class="relative">
-      <select
+      <v-select
+        :options="options"
+        :required="!selected"
         v-model="model"
-        class="cursor-pointer w-full border border-black bg-[#E9E9E9] rounded-xl py-4 px-3 focus:outline-none focus:ring-2 focus:border-transparent"
+        :placeholder="placeholder"
+        class="input w-full border border-[#b4b4b4] bg-white rounded-xl p-3 focus:outline-none focus:ring-2 focus:border-transparent"
       >
-        <option v-for="option in options" :value="option.value">
-          {{ option.label }}
-        </option>
-      </select>
+      </v-select>
+      <div v-if="error" class="text-red-500 text-sm absolute top-[100%]">
+        {{ error }}
+      </div>
     </div>
   </div>
 </template>
 <script setup>
-defineProps(["options", "label"]);
+defineProps(["options", "label", "placeholder", "error"]);
 
 const model = defineModel();
 </script>
@@ -29,15 +32,14 @@ const model = defineModel();
   --vs-controls-color: rgb(0, 0, 0);
 
   --vs-dropdown-bg: rgb(250 250 250);
-  --vs-dropdown-color: rgb(250 250 250);
   --vs-dropdown-option-color: #000;
 
   --vs-selected-bg: #fff;
   --vs-selected-color: #000;
 
-  --vs-search-input-color: #eeeeee;
-
   --vs-dropdown-option--active-bg: #eeeeee;
   --vs-dropdown-option--active-color: #000;
+
+  --vs-search-input-placeholder-color: #777777;
 }
 </style>

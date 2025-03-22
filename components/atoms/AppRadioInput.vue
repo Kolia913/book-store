@@ -1,6 +1,6 @@
 <template>
   <label
-    class="flex items-center justify-start border border-black bg-[#E9E9E9] rounded-xl py-4 px-3 mb-2 cursor-pointer"
+    class="flex items-center justify-start border border-[#b4b4b4] bg-white rounded-xl py-4 px-3 mb-2 cursor-pointer"
   >
     <input
       type="radio"

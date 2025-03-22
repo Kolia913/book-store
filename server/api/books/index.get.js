@@ -10,6 +10,8 @@ export default defineEventHandler(async (event) => {
 
     if (query.draft) {
       whereList.draft = query.draft == "true";
+    } else {
+      whereList.draft = false;
     }
     // == should be there 🙂
     const books = await Book.findAll({

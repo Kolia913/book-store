@@ -51,6 +51,7 @@
                 color="black"
                 :value="cartTranslations.cart_checkout"
                 class="w-full"
+                @click="goToOrder"
               />
             </div>
           </div>
@@ -61,6 +62,7 @@
                 color="black"
                 :value="cartTranslations.cart_checkout"
                 class="w-full"
+                @click="goToOrder"
               />
             </div>
           </div>
@@ -78,24 +80,37 @@ const formattedCart = computed(() => cartStore.formattedCart);
 
 const total = computed(() => cartStore.total);
 
+const router = useRouter();
+
 const cartItemTranslations = computed(() => ({
   available: cartTranslations.value?.available,
   not_available: cartTranslations.value?.not_available,
   delete: cartTranslations.value?.cart_delete,
 }));
+
 const { $toast } = useNuxtApp();
+
+defineEmits(["close"]);
 
 const deleteAllBooks = () => {
   try {
     cartStore.clearCart();
     $toast.success("Корзина очищена!");
+    $emit("close");
   } catch (error) {
     console.error("Error clearing the cart:", error);
     $toast.error("Не вдалося очистити корзину.");
   }
 };
 
-defineEmits(["close"]);
+const goToOrder = () => {
+  if (formattedCart.value.length > 0) {
+    router.push("/order");
+    localStorage.setItem("cartForOrder", JSON.stringify(formattedCart.value));
+  } else {
+    $toast.error("Корзина порожня.");
+  }
+};
 </script>
 
 <style scoped>

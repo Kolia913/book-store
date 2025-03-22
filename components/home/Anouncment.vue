@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="adminDavDobro"
+    v-if="pageData?.isActive"
     class="pt-[50px] xl:pt-[138px] mt-12 lg:mt-24 flex justify-center"
     id="anons"
   >
@@ -15,18 +15,16 @@
       <div
         class="absolute lg:relative flex right-6 lg:right-0 justify-center w-[400px] lg:w-full lg:h-full items-center z-0"
       >
-        <img src="/images/announcment.png" class="w-auto h-auto" />
+        <img :src="pageData?.image?.value" class="w-auto h-auto" />
       </div>
 
       <!-- Right Block (Text Right-Aligned) -->
       <div
         class="flex flex-col justify-between text-white text-left lg:items-end lg:text-right z-20"
       >
-        <h3 class="app-text-h1 mb-[20px]">Анонс нової книги</h3>
+        <h3 class="app-text-h1 mb-[20px]">{{ pageData?.title?.value }}</h3>
         <p class="text-2xl leading-relaxed mt-4 mb-12">
-          “Книга «Скепсис» – фронтова повість, заснована на подіях 2014-2015
-          років. Я писав її, вражений дрімучою «совковістю», з котрою
-          зіштовхнувся повз 12 років від звільнення з армії.”
+          {{ pageData?.description?.value }}
         </p>
 
         <!-- Button (Right-Aligned) -->
@@ -45,6 +43,9 @@ defineProps({
     type: Object,
     required: true,
   },
+  pageData: {
+    type: Object,
+    required: true,
+  },
 });
-const adminDavDobro = ref(true);
 </script>

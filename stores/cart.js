@@ -43,7 +43,11 @@ export const useCartStore = defineStore("cart", {
     },
     saveCart() {
       if (process.client) {
-        localStorage.setItem("cart", JSON.stringify(this.cartContent));
+        try {
+          localStorage.setItem("cart", JSON.stringify(this.cartContent));
+        } catch (error) {
+          console.error("Failed to save cart to localStorage:", error);
+        }
       }
     },
     clearCart() {

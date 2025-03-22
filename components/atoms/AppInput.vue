@@ -8,14 +8,20 @@
       <input
         v-model="model"
         :placeholder="placeholder"
-        class="w-full border border-black bg-[#E9E9E9] rounded-xl py-4 px-3 focus:outline-none focus:ring-2 focus:border-transparent"
+        :type="type"
+        class="w-full border border-[#b4b4b4] bg-white rounded-xl py-4 px-3 focus:outline-none"
       />
+      <div v-if="error" class="text-red-500 text-sm absolute top-[100%]">
+        {{ error }}
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-defineProps(["label", "placeholder"]);
+defineProps(["label", "placeholder", "type", "error"]);
 
 const model = defineModel();
 </script>
+
+<style scoped></style>
