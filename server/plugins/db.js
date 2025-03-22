@@ -5,9 +5,16 @@ export default defineNitroPlugin(async (_nitro) => {
     await sequelize.authenticate();
     consola.success("Connection has been established successfully.");
 
-    Object.values(sequelize.models).forEach((model) => {
-      console.log("Associating models...");
-      model.associate(sequelize.models);
+    const models = sequelize.models;
+    console.log("Available models:", Object.keys(models));
+
+    Object.values(models).forEach((model) => {
+      if (typeof model.associate === "function") {
+        console.log(`Associating model: ${model.name}`);
+        model.associate(models);
+      } else {
+        console.log(`Model ${model.name} has no associate method`);
+      }
     });
     consola.success("All models associations established");
   } catch (error) {
