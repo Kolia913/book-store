@@ -51,6 +51,10 @@ Purchase.init(
       },
       onDelete: "SET NULL",
     },
+    customer_data: {
+      type: DataTypes.JSON,
+      allowNull: true,
+    },
   },
   {
     sequelize,

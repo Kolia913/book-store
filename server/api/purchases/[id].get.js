@@ -39,6 +39,9 @@ export default defineEventHandler(async (event) => {
         : null,
       cart_data: JSON.parse(purchase.cart_data),
       delivery_data: JSON.parse(purchase.delivery_data),
+      customer_data: purchase?.customer_data
+        ? JSON.parse(purchase.customer_data)
+        : null,
     };
   } catch (err) {
     console.log("err", err);

@@ -13,6 +13,10 @@ export default defineEventHandler(async (event) => {
         typeof item.delivery_data === "string"
           ? JSON.parse(item.delivery_data)
           : item.delivery_data,
+      customer_data:
+        typeof item.customer_data === "string"
+          ? JSON.parse(item.customer_data)
+          : item.customer_data,
     }));
   } catch (err) {
     console.log("err", err);
