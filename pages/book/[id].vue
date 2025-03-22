@@ -78,19 +78,25 @@
 <script setup>
 const route = useRoute();
 const cartStore = useCartStore();
+const bookStore = useBooksStore();
 
 const bookId = route.params.id;
 
-const { data: books } = useNuxtData("booksData");
-const { data: bookData } = useLazyFetch(`/api/books/${bookId}`, {
-  key: `book-${route.params.id}`,
-  default() {
-    return books.value.find((book) => book.id === bookId);
-  },
+const { data: bookData } = await useAsyncData(`bookData${bookId}`, () => {
+  return bookStore.fetchBookById(bookId);
 });
+const { $toast } = useNuxtApp();
 
 const addToCart = (productId) => {
-  cartStore.Item(productId);
+  try {
+    cartStore.addItem(productId);
+    $toast.success("Додано до корзини! 😁", {
+      autoClose: 1000,
+    });
+  } catch (error) {
+    console.error("Error adding item to cart:", error);
+    $toast.error("Не вдалося додати до корзини.");
+  }
 };
 
 console.log("Fetched book data:", bookData.value);

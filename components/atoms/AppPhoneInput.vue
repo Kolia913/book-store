@@ -14,6 +14,11 @@
         :searchable="false"
         class="input w-full border-r border-[#b4b4b4] bg-white py-3 mr-3 focus:outline-none focus:ring-2 focus:border-transparent max-w-[100px] text-center"
       >
+        <template #selected-option="{ icon }">
+          <div class="flex gap-2">
+            <component :is="icon" class="w-8 h-fit"></component>
+          </div>
+        </template>
         <template #option="{ country, icon }">
           <div class="flex gap-2">
             <component :is="icon" class="w-8"></component>{{ country }}
@@ -27,13 +32,16 @@
         class="focus:outline-none py-4 focus:border-transparent w-full"
       />
     </div>
+    <div v-if="error" class="text-red-500 text-sm absolute">
+      {{ error }}
+    </div>
   </div>
 </template>
 
 <script setup>
 import { IconsIconGermanFlag } from "#components";
 import IconsIconSlavaUkraine from "../icons/IconSlavaUkraine";
-defineProps(["label", "placeholder"]);
+defineProps(["label", "placeholder", "error"]);
 
 const model = defineModel();
 
