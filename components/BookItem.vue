@@ -4,7 +4,7 @@
   >
     <!-- Book Cover -->
     <div class="w-full md:w-1/2 flex justify-center">
-      <img :src="item.images[0]" class="w-auto h-auto" />
+      <img :src="item.images[0]" class="w-auto max-w-[300px] h-auto" />
     </div>
 
     <!-- Book Info -->

@@ -40,6 +40,9 @@
       @click="toggleCart"
       :color="isNavWhite ? 'white' : 'red'"
       class="relative"
+      :class="{
+        'filter grayscale-[100%] pointer-events-none': $route.path === '/order',
+      }"
     >
       <template #icon>
         <IconsCart />
@@ -47,7 +50,7 @@
           v-if="cartCount > 0"
           class="absolute bg-black -top-1 -left-1 rounded-[50%] w-6 h-6 pt-[2px] text-sm flex justify-center"
           :class="{
-            'bg-primary-red text-white': isNavWhite,
+            'bg-primary-red text-white ': isNavWhite,
           }"
         >
           {{ cartCount }}
@@ -90,6 +93,7 @@
           <IconsIconArrow width="30px" />
         </li>
         <AtomsAppButton
+          v-if="$route.path !== '/order'"
           value="Кошик"
           @click="toggleCart"
           color="red"
@@ -111,7 +115,10 @@
 
   <ClientOnly>
     <Transition name="slide-fade">
-      <PartialsCart v-if="isCartOpen" @close="toggleCart" />
+      <PartialsCart
+        v-if="isCartOpen && $route.path !== '/order'"
+        @close="toggleCart"
+      />
     </Transition>
   </ClientOnly>
 </template>
