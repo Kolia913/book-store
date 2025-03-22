@@ -1,8 +1,9 @@
 import { Purchase } from "~/server/database/models/Purchase";
+import { Customer } from "~/server/database/models/Customer";
 
 export default defineEventHandler(async (_event) => {
   try {
-    const purchases = await Purchase.findAll();
+    const purchases = await Purchase.findAll({ include: [Customer] });
     return purchases.map((item) => ({
       ...item.dataValues,
       cart_data: JSON.parse(item.cart_data),
