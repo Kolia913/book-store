@@ -6,8 +6,14 @@ export default defineEventHandler(async (event) => {
     const purchases = await Purchase.findAll({ include: [Customer] });
     return purchases.map((item) => ({
       ...item.dataValues,
-      cart_data: JSON.parse(item.cart_data),
-      delivery_data: JSON.parse(item.delivery_data),
+      cart_data:
+        typeof item.cart_data === "string"
+          ? JSON.parse(item.cart_data)
+          : item.cart_data,
+      delivery_data:
+        typeof item.delivery_data === "string"
+          ? JSON.parse(item.delivery_data)
+          : item.delivery_data,
     }));
   } catch (err) {
     setResponseStatus(event, 500);
