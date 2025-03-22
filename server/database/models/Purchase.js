@@ -37,6 +37,11 @@ Purchase.init(
       allowNull: false,
       defaultValue: "{}",
     },
+    is_processed: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
     customer_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
