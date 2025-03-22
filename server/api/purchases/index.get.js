@@ -3,7 +3,12 @@ import { Customer } from "~/server/database/models/Customer";
 
 export default defineEventHandler(async (event) => {
   try {
-    const purchases = await Purchase.findAll({ include: [Customer] });
+    const purchases = await Purchase.findAll({
+      include: {
+        model: Customer,
+        required: false,
+      },
+    });
     return purchases.map((item) => ({
       ...item.dataValues,
       cart_data:
