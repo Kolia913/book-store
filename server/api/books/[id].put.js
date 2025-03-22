@@ -55,8 +55,10 @@ export default defineEventHandler(async (event) => {
     const oldImages =
       book.images === null ? [] : book.images.filter((img) => !!img);
 
-    const bulkAdditionResult = await replaceFiles(oldImages, imagesToUpload);
-    images = bulkAdditionResult.paths;
+    if (imagesToUpload?.length) {
+      const bulkAdditionResult = await replaceFiles(oldImages, imagesToUpload);
+      images = bulkAdditionResult.paths;
+    }
 
     if (images.length) {
       data.images = images;
@@ -66,7 +68,7 @@ export default defineEventHandler(async (event) => {
 
     const { error, value } = schema.validate(data);
     if (error) {
-      bulkRemoveFiles(images);
+      imagesToUpload?.length && bulkRemoveFiles(images);
       setResponseStatus(event, 422);
       return createError({
         message: error.details[0].message,
@@ -79,6 +81,7 @@ export default defineEventHandler(async (event) => {
     setResponseStatus(event, 200);
     return book;
   } catch (err) {
+    console.log(err);
     setResponseStatus(event, 500);
     bulkRemoveFiles(images);
     const error = createError({

@@ -12,8 +12,8 @@ const schema = Joi.object({
   is_on_sale: Joi.boolean().default(false),
   price: Joi.number().required(),
   price_with_signature: Joi.number().required(),
-  discount_price: Joi.number().allow(null),
-  discount_price_with_signature: Joi.number().allow(null),
+  discount_price: Joi.number().allow(null).optional(),
+  discount_price_with_signature: Joi.number().allow(null).optional(),
   images: Joi.array().max(4).default([]),
 });
 
