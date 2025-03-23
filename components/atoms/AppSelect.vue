@@ -7,11 +7,12 @@
     <div class="relative">
       <v-select
         :options="options"
-        :required="!selected"
         v-model="model"
-        :reduce="(option) => option.label"
+        :label="labelKey"
+        :reduce="(option) => option[valueKey]"
         :placeholder="placeholder"
         class="input w-full border border-[#b4b4b4] bg-white rounded-xl p-3 focus:outline-none focus:ring-2 focus:border-transparent"
+        @search="handleSearch"
       >
       </v-select>
       <div v-if="error" class="text-red-500 text-sm absolute top-[100%]">
@@ -21,9 +22,22 @@
   </div>
 </template>
 <script setup>
-defineProps(["options", "label", "placeholder", "error"]);
+import { debounce } from "lodash";
 
+defineProps([
+  "options",
+  "label",
+  "placeholder",
+  "error",
+  "labelKey",
+  "valueKey",
+]);
+const emit = defineEmits(["search"]);
 const model = defineModel();
+
+const handleSearch = debounce((query) => {
+  emit("search", query);
+}, 300);
 </script>
 <style>
 .vs__dropdown-toggle {
@@ -42,5 +56,12 @@ const model = defineModel();
   --vs-dropdown-option--active-color: #000;
 
   --vs-search-input-placeholder-color: #777777;
+}
+.vs__selected {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  position: absolute;
+  max-width: 95%;
 }
 </style>

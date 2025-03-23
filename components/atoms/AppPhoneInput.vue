@@ -12,11 +12,11 @@
         :get-option-label="(country) => country.code"
         :clearable="false"
         :searchable="false"
-        class="input w-full border-r border-[#b4b4b4] bg-white py-3 mr-3 focus:outline-none focus:ring-2 focus:border-transparent max-w-[100px] text-center"
+        class="input w-full border-r border-[#b4b4b4] bg-white py-3 mr-3 focus:outline-none focus:ring-2 focus:border-transparent max-w-[90px] text-center"
       >
         <template #selected-option="{ icon }">
           <div class="flex gap-2">
-            <component :is="icon" class="w-8 h-fit"></component>
+            <component :is="icon" class="w-8 h-6"></component>
           </div>
         </template>
         <template #option="{ country, icon }">
@@ -26,9 +26,10 @@
         </template>
       </v-select>
       <input
-        type="tel"
-        v-model="model"
-        :placeholder="placeholder"
+        v-maska
+        :data-maska="selectedCode"
+        v-model="maskedValue"
+        placeholder="Введіть номер телефону"
         class="focus:outline-none py-4 focus:border-transparent w-full"
       />
     </div>
@@ -41,23 +42,28 @@
 <script setup>
 import { IconsIconGermanFlag } from "#components";
 import IconsIconSlavaUkraine from "../icons/IconSlavaUkraine";
+
 defineProps(["label", "placeholder", "error"]);
 
-const model = defineModel();
+const maskedValue = ref("");
+const selectedCode = ref("+38# ## ### ## ##");
 
 const phoneCodes = ref([
   {
     id: 1,
     country: "Ukraine",
-    code: "+380",
+    code: "+38# ## ### ## ##",
     icon: IconsIconSlavaUkraine,
   },
   {
     id: 2,
     country: "Germany",
-    code: "+49",
+    code: "+49 ### ######",
     icon: IconsIconGermanFlag,
   },
 ]);
-const selectedCode = ref(phoneCodes.value[0]);
+
+watch(selectedCode, (newCode) => {
+  maskedValue.value = "";
+});
 </script>
