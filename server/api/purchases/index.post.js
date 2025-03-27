@@ -16,6 +16,7 @@ const schema = Joi.object({
     )
     .required(),
   customer_id: Joi.number().integer().required(),
+  payment_status: Joi.string().default("pending"),
 });
 
 export default defineEventHandler(async (event) => {

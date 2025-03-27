@@ -6,6 +6,13 @@ export default defineNuxtConfig({
   pinia: {
     storesDirs: ["./stores/**"],
   },
+  security: {
+    headers: {
+      contentSecurityPolicy: {
+        "form-action": ["'self'", "https://secure.wayforpay.com/pay"],
+      },
+    },
+  },
   routeRules: {
     "/api/**": {
       security: {
@@ -22,6 +29,9 @@ export default defineNuxtConfig({
   css: ["~/assets/css/main.css"],
   runtimeConfig: {
     jwtSecret: process.env.JWT_SECRET,
+    wayforpayMerchantLogin: process.env.WAYFORPAY_MERCHANT_LOGIN,
+    wayforpaySecretKey: process.env.WAYFORPAY_SECRET_KEY,
+    wayforpayCallbackUrl: process.env.WAYFORPAY_CALLBACK_URL,
   },
   vite: {
     plugins: [tailwindcss()],

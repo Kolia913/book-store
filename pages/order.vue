@@ -37,7 +37,6 @@
             v-model="formData.phone"
             :label="pageData?.content?.contact_data?.phone?.value"
             type="tel"
-            required
             :placeholder="pageData?.content?.contact_data?.phone?.value"
             :error="errors.phone"
           />
@@ -114,13 +113,13 @@
             v-model="formData.city"
             :label="pageData?.content?.delivery_data?.city?.value"
             labelKey="Present"
-            valueKey="Present"
+            valueKey="Ref"
             :options="cities"
             :placeholder="pageData?.content?.delivery_data?.city?.value"
             required
             :error="errors.city"
             @search="fetchCities"
-            @input="handleCitySelect"
+            @change="handleCitySelect($event)"
           />
           <AtomsAppSelect
             v-model="formData.delivery"
@@ -128,6 +127,7 @@
             labelKey="label"
             valueKey="label"
             :options="deliveryTypes"
+            :searchable="false"
             class="sm:col-span-2"
             :placeholder="
               pageData?.content?.delivery_data?.delivery_type?.value
@@ -146,7 +146,7 @@
             placeholder="Відділеня/Поштомат"
             required
             :error="errors.warehouse"
-            @search="fetchWarehouses(formData.settlementRef, $event)"
+            @search="fetchWarehouses(settlementRef, $event)"
           />
         </div>
       </div>
@@ -278,6 +278,7 @@ onMounted(() => {
 const total = computed(() => {
   return cartForOrder.value.reduce((sum, item) => sum + item.cost, 0);
 });
+const settlementRef = ref("");
 const formData = reactive({
   name: "",
   surname: "",
@@ -285,8 +286,8 @@ const formData = reactive({
   email: "",
   country: "",
   city: "",
-  settlementRef: "",
   delivery: "",
+  warehouse: "",
   payment: "",
 });
 
@@ -294,7 +295,6 @@ const errors = reactive({});
 
 const validateForm = () => {
   let isValid = true;
-
   Object.keys(errors).forEach((key) => delete errors[key]);
 
   if (!formData.name) {
@@ -309,17 +309,17 @@ const validateForm = () => {
     errors.surname = "Прізвище обов'язкове";
     isValid = false;
   } else if (formData.surname.length < 2) {
-    errors.name = "Прізвище має містити мінімум 2 символи";
+    errors.surname = "Прізвище має містити мінімум 2 символи";
     isValid = false;
   }
 
-  if (!formData.phone) {
-    errors.phone = "Телефон обов'язковий";
-    isValid = false;
-  } else if (!/^\+380\d{9}$/.test(formData.phone)) {
-    errors.phone = "Невірний формат телефону. Приклад: +380xxxxxxxxx";
-    isValid = false;
-  }
+  // if (!formData.phone) {
+  //   errors.phone = "Телефон обов'язковий";
+  //   isValid = false;
+  // } else if (!/^\+380\d{9}$/.test(formData.phone)) {
+  //   errors.phone = "Невірний формат телефону. Приклад: +380xxxxxxxxx";
+  //   isValid = false;
+  // }
 
   if (!formData.email) {
     errors.email = "Email обов'язковий";
@@ -348,26 +348,24 @@ const validateForm = () => {
     errors.payment = "Спосіб оплати обов'язковий";
     isValid = false;
   }
-  if (!formData.warehouse) {
-    errors.warehouse = "Відділеня/Поштомат обов'язковий";
+
+  if (formData.delivery === "Нова пошта" && !formData.warehouse) {
+    errors.warehouse = "Відділення/Поштомат обов'язковий";
     isValid = false;
   }
 
   return isValid;
 };
+
 const handleCitySelect = (selectedCity) => {
-  formData.city = selectedCity.Present;
-  formData.settlementRef = selectedCity.SettlementRef;
-  console.log(formData.settlementRef);
-  console.log(formData.settlementRef);
+  if (!selectedCity) return;
+  settlementRef.value = formData.city;
 };
 
 const fetchCities = async (query) => {
   if (query.length < 2) return;
-
   try {
     const response = await npStore.fetchSettlements(query);
-
     if (
       response?.success &&
       Array.isArray(response.data) &&
@@ -375,9 +373,9 @@ const fetchCities = async (query) => {
     ) {
       cities.value = response.data[0].Addresses.map((city) => ({
         Present: city.Present,
+        Ref: city.Ref,
       }));
     } else {
-      console.error("Invalid API response:", response);
       cities.value = [];
     }
   } catch (error) {
@@ -389,7 +387,6 @@ const fetchCities = async (query) => {
 const fetchWarehouses = async (settlementRef, query) => {
   try {
     const response = await npStore.fetchWarehouses(settlementRef, query);
-
     if (
       response?.success &&
       Array.isArray(response.data) &&
@@ -399,11 +396,10 @@ const fetchWarehouses = async (settlementRef, query) => {
         Description: warehouse.Description,
       }));
     } else {
-      console.error("Invalid API response:", response);
       warehouses.value = [];
     }
   } catch (error) {
-    console.error("Error fetching cities:", error);
+    console.error("Error fetching warehouses:", error);
     warehouses.value = [];
   }
 };
@@ -413,56 +409,92 @@ const handleOrder = async () => {
     $toast.warning("Заповніть всі обов'язкові поля");
     return;
   }
-  try {
-    const { data: userData } = await useAsyncData(() =>
-      $fetch("/api/customers", {
-        method: "POST",
-        body: JSON.stringify({
-          phone: formData.phone,
-          name: formData.name,
-          surname: formData.surname,
-          email: formData.email,
-        }),
-      })
-    );
-    const cartData = cartForOrder.value.map((item) => ({
-      book_id: item.id,
-      qty: item.quantity,
-    }));
 
-    const { data: purchaseResponse } = await useAsyncData(() =>
-      $fetch("/api/purchases", {
+  try {
+    const customerResponse = await $fetch("/api/customers", {
+      method: "POST",
+      body: {
+        phone: formData.phone,
+        name: formData.name,
+        surname: formData.surname,
+        email: formData.email,
+      },
+    });
+
+    console.log("Customer API Response:", customerResponse);
+
+    if (!customerResponse?.customer?.id) {
+      console.error("Invalid customer response structure:", customerResponse);
+      throw new Error("Некоректна відповідь від сервера при створенні клієнта");
+    }
+
+    const customerId = customerResponse.customer.id;
+    console.log("Created customer ID:", customerId);
+
+    const purchaseResponse = await $fetch("/api/purchases", {
+      method: "POST",
+      body: {
+        payment_type: formData.payment,
+        customer_id: customerId,
+        cart_data: cartForOrder.value.map((item) => ({
+          book_id: item.id,
+          qty: item.quantity,
+          price: item.price,
+        })),
+        total: total.value,
+        delivery_data: {
+          country: formData.country,
+          city: formData.city,
+          type: formData.delivery,
+          warehouse: formData.warehouse,
+        },
+        payment_status: "pending",
+      },
+    });
+
+    console.log("Purchase API Response:", purchaseResponse.value);
+
+    if (!purchaseResponse) {
+      throw new Error("Не вдалося створити замовлення");
+    }
+    const orderReference = `ORDER_${Date.now()}`;
+
+    if (formData.payment === "Онлайн оплата") {
+      const paymentResponse = await $fetch("/api/wayforpay/init", {
         method: "POST",
         body: {
-          payment_type: formData.payment,
-          customer_id: userData.value.customer.id,
-          customer_data: {
-            name: userData.value.customer.name,
-            surname: userData.value.customer.surname,
-            phone: userData.value.customer.phone,
-            email: userData.value.customer.email,
-          },
-          cart_data: cartData,
-          total: total.value,
-          delivery_data: {
-            country: formData.country,
-            city: formData.city,
-            type: formData.delivery,
-            warehouse: formData.warehouse,
-          },
+          orderReference,
+          amount: total.value,
+          cartItems: cartForOrder.value,
         },
-      })
-    );
-
-    showSuccessModal.value = true;
-    localStorage.removeItem("cartForOrder");
-
-    cartForOrder.value = [];
+      });
+      if (!paymentResponse) {
+        throw new Error("Не вдалося ініціалізувати платіж");
+      }
+      createWayforpayForm(paymentResponse);
+      console.log(
+        "Final payment data:",
+        JSON.stringify(paymentResponse, null, 2)
+      );
+    } else if (formData.payment === "Готівкою при отриманні") {
+      showSuccessModal.value = true;
+      localStorage.removeItem("cartForOrder");
+      cartForOrder.value = [];
+    }
   } catch (error) {
-    console.error("Error creating user or placing order:", error);
-    $toast.error(
-      "Помилка при створенні користувача або оформленні замовлення."
-    );
+    console.error("Order processing error:", {
+      message: error.message,
+      stack: error.stack,
+      response: error.response,
+    });
+
+    const errorMessage =
+      error.data?.message ||
+      error.response?._data?.message ||
+      error.message ||
+      "Сталася невідома помилка";
+
+    $toast.error(`Помилка: ${errorMessage}`);
   }
 };
 
@@ -482,32 +514,20 @@ watch(
     }
   }
 );
+
 onUnmounted(() => {
   document.body.style.overflow = "";
 });
 
 const countries = ref([
-  {
-    label: "Україна",
-    id: "ukraine",
-  },
-  {
-    label: "Польща",
-    id: "poland",
-  },
+  { label: "Україна", id: "ukraine" },
+  { label: "Польща", id: "poland" },
 ]);
 const deliveryTypes = ref([
-  {
-    label: "Нова пошта",
-    id: "nova-poshta",
-  },
-  {
-    label: "Укрпошта",
-    id: "ukrposhta",
-  },
+  { label: "Нова пошта", id: "nova-poshta" },
+  { label: "Укрпошта", id: "ukrposhta" },
 ]);
 </script>
-
 <style scoped>
 .v-enter-active,
 .v-leave-active {

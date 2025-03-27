@@ -11,6 +11,7 @@
         :label="labelKey"
         :reduce="(option) => option[valueKey]"
         :placeholder="placeholder"
+        :searchable="searchable"
         class="input w-full border border-[#b4b4b4] bg-white rounded-xl p-3 focus:outline-none focus:ring-2 focus:border-transparent"
         @search="handleSearch"
       >
@@ -31,6 +32,7 @@ defineProps([
   "error",
   "labelKey",
   "valueKey",
+  "searchable",
 ]);
 const emit = defineEmits(["search"]);
 const model = defineModel();
