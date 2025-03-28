@@ -6,13 +6,14 @@ export function createWayforpayForm(paymentData) {
   form.target = "_blank";
 
   const flatData = {};
-  Object.keys(paymentData).forEach((key) => {
-    if (Array.isArray(paymentData[key])) {
-      paymentData[key].forEach((value, index) => {
+  const extractedData = JSON.parse(JSON.stringify(paymentData.paymentData));
+  Object.keys(extractedData).forEach((key) => {
+    if (Array.isArray(extractedData[key])) {
+      extractedData[key].forEach((value, index) => {
         flatData[`${key}[${index}]`] = value;
       });
     } else {
-      flatData[key] = paymentData[key];
+      flatData[key] = extractedData[key];
     }
   });
 
