@@ -423,12 +423,12 @@ const handleOrder = async () => {
 
     console.log("Customer API Response:", customerResponse);
 
-    if (!customerResponse?.customer?.id) {
+    if (!customerResponse?.data?.customer?.id) {
       console.error("Invalid customer response structure:", customerResponse);
       throw new Error("Некоректна відповідь від сервера при створенні клієнта");
     }
 
-    const customerId = customerResponse.customer.id;
+    const customerId = customerResponse.data.customer.id;
     console.log("Created customer ID:", customerId);
 
     const purchaseResponse = await $fetch("/api/purchases", {
@@ -452,12 +452,12 @@ const handleOrder = async () => {
       },
     });
 
-    console.log("Purchase API Response:", purchaseResponse.value);
-
     if (!purchaseResponse) {
       throw new Error("Не вдалося створити замовлення");
     }
-    const orderReference = `ORDER_${Date.now()}`;
+    console.log("Purchase API Response:", purchaseResponse.data);
+
+    const orderReference = `ORDER_${new Date().toISOString()}`;
 
     if (formData.payment === "Онлайн оплата") {
       const paymentResponse = await $fetch("/api/wayforpay/init", {

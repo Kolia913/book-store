@@ -45,39 +45,44 @@ export default defineEventHandler(async (event) => {
         });
       }
     }
-
     const productNames = cartItems.map((item) => item.title);
     const productCounts = cartItems.map((item) => item.quantity);
     const productPrices = cartItems.map((item) => item.cost);
 
+    const paymentDate = Math.floor(Date.now() / 1000);
+    const domainName = "obert.com.ua";
+
     const signatureString = [
-      requiredConfig.merchantAccount,
-      "https://obert.com.ua/",
+      runtimeConfig.wayforpayMerchantLogin,
+      domainName,
       orderReference,
-      Math.floor(Date.now() / 1000),
+      paymentDate,
       amount,
       "UAH",
       ...productNames,
       ...productCounts,
       ...productPrices,
     ].join(";");
+    console.log("Sekretik:", runtimeConfig.wayforpaySecretKey);
+
     console.log("WayForPay Signature String:", signatureString);
 
-    const merchantSignature = crypto
-      .createHmac("md5", requiredConfig.secretKey)
-      .update(signatureString)
-      .digest("hex");
+    function generateHmacMd5(string, key) {
+      return crypto.createHmac("md5", key).update(string).digest("hex");
+    }
+    const merchantSignature = generateHmacMd5(
+      signatureString,
+      runtimeConfig.wayforpaySecretKey
+    );
 
     console.log("WayForPay Merchant Signature:", merchantSignature);
-
     return {
       paymentData: {
         merchantAccount: requiredConfig.merchantAccount,
-        merchantDomainName: "https://obert.com.ua/",
-        merchantAuthType: "SimpleSignature",
+        merchantDomainName: domainName,
         orderReference,
-        orderDate: Math.floor(Date.now() / 1000),
-        amount: amount,
+        orderDate: paymentDate,
+        amount,
         currency: "UAH",
         productName: productNames,
         productCount: productCounts,
