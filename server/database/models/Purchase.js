@@ -19,6 +19,11 @@ Purchase.init(
       type: DataTypes.STRING(100),
       allowNull: false,
     },
+    payment_status: {
+      type: DataTypes.ENUM("pending", "completed", "failed", "refunded"),
+      allowNull: false,
+      defaultValue: "pending",
+    },
     payment_details: {
       type: DataTypes.TEXT,
       allowNull: true,

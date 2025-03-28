@@ -28,7 +28,7 @@
       <input
         v-maska
         :data-maska="selectedCode"
-        v-model="maskedValue"
+        v-model="model"
         placeholder="Введіть номер телефону"
         class="focus:outline-none py-4 focus:border-transparent w-full"
       />
@@ -44,6 +44,8 @@ import { IconsIconGermanFlag } from "#components";
 import IconsIconSlavaUkraine from "../icons/IconSlavaUkraine";
 
 defineProps(["label", "placeholder", "error"]);
+
+const model = defineModel();
 
 const maskedValue = ref("");
 const selectedCode = ref("+38# ## ### ## ##");
@@ -65,5 +67,6 @@ const phoneCodes = ref([
 
 watch(selectedCode, (newCode) => {
   maskedValue.value = "";
+  model.value = "";
 });
 </script>
