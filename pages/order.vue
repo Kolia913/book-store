@@ -423,12 +423,12 @@ const handleOrder = async () => {
 
     console.log("Customer API Response:", customerResponse);
 
-    if (!customerResponse?.data?.customer?.id) {
+    if (!customerResponse?.customer?.id) {
       console.error("Invalid customer response structure:", customerResponse);
       throw new Error("Некоректна відповідь від сервера при створенні клієнта");
     }
 
-    const customerId = customerResponse.data.customer.id;
+    const customerId = customerResponse.customer.id;
     console.log("Created customer ID:", customerId);
 
     const purchaseResponse = await $fetch("/api/purchases", {
@@ -455,7 +455,7 @@ const handleOrder = async () => {
     if (!purchaseResponse) {
       throw new Error("Не вдалося створити замовлення");
     }
-    console.log("Purchase API Response:", purchaseResponse.data);
+    console.log("Purchase API Response:", purchaseResponse);
 
     const orderReference = `ORDER_${new Date().toISOString()}`;
 
