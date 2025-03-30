@@ -2,7 +2,7 @@
   <div
     class="flex flex-col items-center px-4 lg:px-12 xl:px-40 pt-[50px] xl:pt-[138px] relative overflow-hidden"
     id="sale"
-    v-if="pageData?.isActive"
+    v-if="pageData?.isActive || books.length >= 0"
   >
     <IconsIconLightning2
       class="absolute right-[-570px] bottom-[80px] lg:right-[-270px] lg:bottom-[-280px]"
