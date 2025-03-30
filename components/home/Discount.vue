@@ -20,14 +20,14 @@
     <div
       class="grid grid-cols-1 place-items-center gap-10 w-full my-18 z-2"
       :class="{
-        'lg:grid-cols-1': (saleBooks.length = 1),
-        'md:grid-cols-2 lg:grid-cols-2': (saleBooks.length = 2),
-        'md:grid-cols-2 lg:grid-cols-3': (saleBooks.length = 3),
-        'md:grid-cols-2 lg:grid-cols-4': saleBooks.length >= 4,
+        'lg:grid-cols-1': books.length === 1,
+        'md:grid-cols-2 lg:grid-cols-2': books.length === 2,
+        'md:grid-cols-2 lg:grid-cols-3': books.length === 3,
+        'md:grid-cols-2 lg:grid-cols-4': books.length >= 4,
       }"
     >
       <div
-        v-for="book in saleBooks"
+        v-for="book in books"
         :key="book?.id"
         class="flex flex-col items-center gap-4"
       >
@@ -51,8 +51,6 @@
 </template>
 
 <script setup>
-const booksStore = useBooksStore();
-
 defineProps({
   data: {
     type: Object,
@@ -62,13 +60,9 @@ defineProps({
     type: Object,
     required: true,
   },
+  books: {
+    type: Object,
+    required: true,
+  },
 });
-
-const { data: books } = await useAsyncData("booksData", () => {
-  return booksStore.fetchBooks();
-});
-const saleBooks = computed(() => {
-  return books.value?.filter((book) => book.is_on_sale) || [];
-});
-console.log(saleBooks.value);
 </script>
