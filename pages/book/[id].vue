@@ -63,11 +63,17 @@
             >
             <span class="text-2xl">{{ bookData.price_with_signature }} ₴</span>
           </div>
-          <AtomsAppOutlinedButton
-            value="купити з підписом автора"
-            color="filled"
-            class="text-lg w-full uppercase"
-          />
+          <NuxtLink
+            to="https://t.me/grigoryobertailo"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <AtomsAppOutlinedButton
+              value="купити з підписом автора"
+              color="filled"
+              class="text-lg w-full uppercase"
+            />
+          </NuxtLink>
         </div>
       </div>
     </div>
