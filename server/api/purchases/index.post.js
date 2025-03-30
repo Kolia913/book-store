@@ -1,4 +1,4 @@
-import Joi from "joi";
+import Joi, { custom } from "joi";
 import { Purchase } from "~/server/database/models/Purchase";
 import { Book } from "~/server/database/models/Book";
 
@@ -16,7 +16,9 @@ const schema = Joi.object({
     )
     .required(),
   customer_id: Joi.number().integer().required(),
+  customer_data: Joi.object().optional(),
   payment_status: Joi.string().default("pending"),
+  wayforpay_reference: Joi.string().max(100).required(),
 });
 
 export default defineEventHandler(async (event) => {
@@ -34,17 +36,19 @@ export default defineEventHandler(async (event) => {
     }
 
     value.delivery_data = JSON.stringify(value.delivery_data);
+    value.customer_data = JSON.stringify(value.customer_data);
 
     value.cart_data = await enrichCartData(value.cart_data);
 
     const purchase = await Purchase.create(value);
     setResponseStatus(event, 201);
-
+    purchase.customer_data = JSON.parse(purchase.customer_data);
     purchase.delivery_data = JSON.parse(purchase.delivery_data);
     purchase.cart_data = JSON.parse(purchase.cart_data);
 
     return purchase;
   } catch (err) {
+    console.log(err);
     setResponseStatus(event, 500);
     const error = createError({
       message: "Something went wrong",

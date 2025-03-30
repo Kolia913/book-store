@@ -1,8 +1,14 @@
 import { Purchase } from "~/server/database/models/Purchase";
 
 export default defineEventHandler(async (event) => {
-  const purchaseId = getRouterParam(event, "id");
-  const { status, payment_details = null } = await readBody(event);
+  const { orderReference, status } = await readBody(event);
+
+  if (!orderReference) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "orderReference is required",
+    });
+  }
 
   if (!["pending", "completed", "failed", "refunded"].includes(status)) {
     throw createError({
@@ -12,19 +18,18 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const purchase = await Purchase.findByPk(purchaseId);
+    const purchase = await Purchase.findOne({
+      where: { wayforpay_reference: orderReference },
+    });
 
     if (!purchase) {
       throw createError({
         statusCode: 404,
-        statusMessage: "Purchase not found",
+        statusMessage: "Purchase not found for the given orderReference",
       });
     }
 
     const updateData = { payment_status: status };
-    if (payment_details) {
-      updateData.payment_details = payment_details;
-    }
 
     await purchase.update(updateData);
 

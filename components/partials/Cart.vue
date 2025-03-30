@@ -107,7 +107,6 @@ const goToOrder = () => {
   if (formattedCart.value.length > 0) {
     router.push("/order");
     localStorage.setItem("cartForOrder", JSON.stringify(formattedCart.value));
-    console.log(formattedCart.value);
   } else {
     $toast.error("Корзина порожня.");
   }

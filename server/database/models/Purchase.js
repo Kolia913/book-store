@@ -24,6 +24,10 @@ Purchase.init(
       allowNull: false,
       defaultValue: "pending",
     },
+    wayforpay_reference: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+    },
     payment_details: {
       type: DataTypes.TEXT,
       allowNull: true,

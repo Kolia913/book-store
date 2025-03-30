@@ -25,7 +25,7 @@ export const useNPStore = defineStore("novapost", {
         throw error;
       }
     },
-    async fetchWarehouses(cityRef, warehouseNum) {
+    async fetchWarehouses(settlementRef, warehouseNum) {
       try {
         const res = await $fetch("https://api.novaposhta.ua/v2.0/json/", {
           method: "POST",
@@ -35,7 +35,7 @@ export const useNPStore = defineStore("novapost", {
             calledMethod: "getWarehouses",
             methodProperties: {
               FindByString: warehouseNum,
-              SettlementRef: cityRef,
+              SettlementRef: settlementRef,
               Page: "1",
               Limit: "10",
               Language: "UA",
@@ -52,5 +52,5 @@ export const useNPStore = defineStore("novapost", {
 });
 
 if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(useBooksStore, import.meta.hot));
+  import.meta.hot.accept(acceptHMRUpdate(useNPStore, import.meta.hot));
 }

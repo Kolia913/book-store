@@ -113,11 +113,12 @@
             v-model="formData.city"
             :label="pageData?.content?.delivery_data?.city?.value"
             labelKey="Present"
-            valueKey="Ref"
+            valueKey="Present"
             :options="cities"
             :placeholder="pageData?.content?.delivery_data?.city?.value"
             required
             :error="errors.city"
+            :class="{ 'pointer-events-none opacity-50': !formData.country }"
             @search="fetchCities"
             @change="handleCitySelect($event)"
           />
@@ -129,6 +130,10 @@
             :options="deliveryTypes"
             :searchable="false"
             class="sm:col-span-2"
+            :class="{
+              'pointer-events-none opacity-50':
+                !formData.city || !formData.country,
+            }"
             :placeholder="
               pageData?.content?.delivery_data?.delivery_type?.value
             "
@@ -136,13 +141,18 @@
             :error="errors.delivery"
           />
           <AtomsAppSelect
-            v-if="formData.delivery === 'Нова пошта'"
+            v-if="
+              formData.delivery === 'Нова пошта' &&
+              formData.city &&
+              formData.country
+            "
             v-model="formData.warehouse"
             label="Виберіть відділеня/поштомат"
             labelKey="Description"
             valueKey="Description"
             :options="warehouses"
             class="sm:col-span-2"
+            :class="{ 'pointer-events-none opacity-50': !formData.delivery }"
             placeholder="Відділеня/Поштомат"
             required
             :error="errors.warehouse"
@@ -179,7 +189,7 @@
         <div class="flex flex-col gap-2 sm:gap-4 pt-10">
           <AtomsAppRadioInput
             v-model="formData.payment"
-            label="Apple pay"
+            label="Онлайн оплата"
             value="Онлайн оплата"
             name="payment-method"
           />
@@ -313,13 +323,10 @@ const validateForm = () => {
     isValid = false;
   }
 
-  // if (!formData.phone) {
-  //   errors.phone = "Телефон обов'язковий";
-  //   isValid = false;
-  // } else if (!/^\+380\d{9}$/.test(formData.phone)) {
-  //   errors.phone = "Невірний формат телефону. Приклад: +380xxxxxxxxx";
-  //   isValid = false;
-  // }
+  if (!formData.phone) {
+    errors.phone = "Телефон обов'язковий";
+    isValid = false;
+  }
 
   if (!formData.email) {
     errors.email = "Email обов'язковий";
@@ -357,9 +364,16 @@ const validateForm = () => {
   return isValid;
 };
 
-const handleCitySelect = (selectedCity) => {
-  if (!selectedCity) return;
-  settlementRef.value = formData.city;
+const handleCitySelect = (selectedCityLabel) => {
+  if (!selectedCityLabel) return;
+
+  const selectedCity = cities.value.find(
+    (city) => city.Present === selectedCityLabel
+  );
+  if (selectedCity) {
+    settlementRef.value = selectedCity.Ref;
+    fetchWarehouses(settlementRef.value, "");
+  }
 };
 
 const fetchCities = async (query) => {
@@ -403,7 +417,6 @@ const fetchWarehouses = async (settlementRef, query) => {
     warehouses.value = [];
   }
 };
-
 const handleOrder = async () => {
   if (!validateForm()) {
     $toast.warning("Заповніть всі обов'язкові поля");
@@ -421,43 +434,12 @@ const handleOrder = async () => {
       },
     });
 
-    console.log("Customer API Response:", customerResponse);
-
     if (!customerResponse?.customer?.id) {
-      console.error("Invalid customer response structure:", customerResponse);
       throw new Error("Некоректна відповідь від сервера при створенні клієнта");
     }
 
     const customerId = customerResponse.customer.id;
-    console.log("Created customer ID:", customerId);
-
-    const purchaseResponse = await $fetch("/api/purchases", {
-      method: "POST",
-      body: {
-        payment_type: formData.payment,
-        customer_id: customerId,
-        cart_data: cartForOrder.value.map((item) => ({
-          book_id: item.id,
-          qty: item.quantity,
-          price: item.price,
-        })),
-        total: total.value,
-        delivery_data: {
-          country: formData.country,
-          city: formData.city,
-          type: formData.delivery,
-          warehouse: formData.warehouse,
-        },
-        payment_status: "pending",
-      },
-    });
-
-    if (!purchaseResponse) {
-      throw new Error("Не вдалося створити замовлення");
-    }
-    console.log("Purchase API Response:", purchaseResponse);
-
-    const orderReference = `ORDER_${new Date().toISOString()}`;
+    const orderReference = `ORDER_${Date.now()}`;
 
     if (formData.payment === "Онлайн оплата") {
       const paymentResponse = await $fetch("/api/wayforpay/init", {
@@ -466,35 +448,115 @@ const handleOrder = async () => {
           orderReference,
           amount: total.value,
           cartItems: cartForOrder.value,
+          clientEmail: formData.email,
+          clientFirstName: formData.name,
+          clientLastName: formData.surname,
+          clientPhone: formData.phone,
         },
       });
-      if (!paymentResponse) {
+
+      if (!paymentResponse?.widgetData) {
         throw new Error("Не вдалося ініціалізувати платіж");
       }
-      createWayforpayForm(paymentResponse);
-      console.log(
-        "Final payment data:",
-        JSON.stringify(paymentResponse, null, 2)
+
+      const { $wayforpay } = useNuxtApp();
+      const wayforpay = await $wayforpay.load();
+
+      wayforpay.run(
+        paymentResponse.widgetData,
+        (response) => {
+          console.log("Payment approved:", response);
+          handlePaymentSuccess(response, {
+            customerId,
+            orderReference,
+            paymentType: formData.payment,
+          });
+        },
+        (response) => {
+          console.log("Payment declined:", response);
+          $toast.error(
+            "Платіж не пройшов. Спробуйте ще раз або оберіть інший спосіб оплати"
+          );
+        },
+        (response) => {
+          console.log("Payment pending:", response);
+          $toast.info("Платіж обробляється. Будь ласка, зачекайте");
+        }
       );
     } else if (formData.payment === "Готівкою при отриманні") {
+      await createOrder(customerId, orderReference, formData.payment);
       showSuccessModal.value = true;
       localStorage.removeItem("cartForOrder");
       cartForOrder.value = [];
     }
   } catch (error) {
-    console.error("Order processing error:", {
-      message: error.message,
-      stack: error.stack,
-      response: error.response,
+    console.error("Order processing error:", error);
+    const errorMessage =
+      error.data?.message || error.message || "Сталася невідома помилка";
+    $toast.error(`Помилка: ${errorMessage}`);
+  }
+};
+
+const createOrder = async (customerId, orderReference, paymentType) => {
+  const purchaseResponse = await $fetch("/api/purchases", {
+    method: "POST",
+    body: {
+      payment_type: paymentType,
+      customer_id: customerId,
+      customer_data: {
+        name: formData.name,
+        surname: formData.surname,
+        phone: formData.phone,
+        email: formData.email,
+      },
+      cart_data: cartForOrder.value.map((item) => ({
+        book_id: item.id,
+        qty: item.quantity,
+        price: item.price,
+      })),
+      total: total.value,
+      delivery_data: {
+        country: formData.country,
+        city: formData.city,
+        type: formData.delivery,
+        warehouse: formData.warehouse,
+      },
+      payment_status: paymentType === "Онлайн оплата" ? "completed" : "pending",
+      wayforpay_reference: orderReference,
+    },
+  });
+
+  if (!purchaseResponse) {
+    throw new Error("Не вдалося створити замовлення");
+  }
+  return purchaseResponse;
+};
+
+const handlePaymentSuccess = async (response, orderData) => {
+  try {
+    await createOrder(
+      orderData.customerId,
+      orderData.orderReference,
+      orderData.paymentType
+    );
+
+    await $fetch("/api/purchases/update-status", {
+      method: "PATCH",
+      body: {
+        orderReference: response.orderReference,
+        status: "completed",
+      },
     });
 
-    const errorMessage =
-      error.data?.message ||
-      error.response?._data?.message ||
-      error.message ||
-      "Сталася невідома помилка";
-
-    $toast.error(`Помилка: ${errorMessage}`);
+    showSuccessModal.value = true;
+    localStorage.removeItem("cartForOrder");
+    cartForOrder.value = [];
+    localStorage.removeItem("cart");
+  } catch (err) {
+    console.error("Failed to create/update order:", err);
+    $toast.error(
+      "Платіж пройшов успішно, але виникла помилка при створенні замовлення"
+    );
   }
 };
 
@@ -505,12 +567,23 @@ watch(showSuccessModal, (newVal) => {
     document.body.style.overflow = "";
   }
 });
+watch(
+  () => formData.city,
+  (newVal) => {
+    handleCitySelect(newVal);
+  }
+);
+
+watch(settlementRef, (newVal) => {
+  npStore.fetchWarehouses(newVal, "");
+});
 
 watch(
   () => formData.city,
   (newCity) => {
     if (newCity) {
       npStore.fetchSettlements(newCity);
+      formData.warehouse = "";
     }
   }
 );
@@ -521,11 +594,11 @@ onUnmounted(() => {
 
 const countries = ref([
   { label: "Україна", id: "ukraine" },
-  { label: "Польща", id: "poland" },
+  // { label: "Польща", id: "poland" },
 ]);
 const deliveryTypes = ref([
   { label: "Нова пошта", id: "nova-poshta" },
-  { label: "Укрпошта", id: "ukrposhta" },
+  // { label: "Укрпошта", id: "ukrposhta" },
 ]);
 </script>
 <style scoped>

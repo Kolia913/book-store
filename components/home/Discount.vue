@@ -5,7 +5,7 @@
     v-if="pageData?.isActive"
   >
     <IconsIconLightning2
-      class="absolute right-[-370px] bottom-[780px] lg:right-[-270px] lg:bottom-[-280px]"
+      class="absolute right-[-570px] bottom-[80px] lg:right-[-270px] lg:bottom-[-280px]"
     />
     <IconsIconLightning3
       class="absolute left-[-320px] bottom-[310px] lg:left-[-220px] md:bottom-[-10px]"
@@ -18,15 +18,25 @@
       {{ pageData?.titlePart2.value }}
     </div>
     <div
-      class="grid grid-cols-1 place-items-center md:grid-cols-2 lg:grid-cols-4 gap-10 w-full my-18 z-2"
+      class="grid grid-cols-1 place-items-center gap-10 w-full my-18 z-2"
+      :class="{
+        'lg:grid-cols-1': (books.length = 1),
+        'md:grid-cols-2 lg:grid-cols-2': (books.length = 2),
+        'md:grid-cols-2 lg:grid-cols-3': (books.length = 3),
+        'md:grid-cols-2 lg:grid-cols-4': books.length >= 4,
+      }"
     >
-      <div v-for="book in books" :key="book.id">
+      <div
+        v-for="book in books"
+        :key="book.id"
+        class="flex flex-col items-center gap-4"
+      >
         <img :src="book.image" />
-        <div class="text-4xl">{{ book.title }}</div>
+        <div class="text-4xl uppercase text-center">{{ book.title }}</div>
         <div class="flex items-end gap-4">
-          <div class="app-text-price">{{ book.price }}$</div>
+          <div class="app-text-price">{{ book.discount_price }}₴</div>
           <div class="text-2xl line-through text-[#7E827D]">
-            {{ book.oldPrice }}$
+            {{ book.price }}$
           </div>
         </div>
       </div>
@@ -39,6 +49,7 @@
     />
   </div>
 </template>
+
 <script setup>
 defineProps({
   data: {
@@ -49,35 +60,10 @@ defineProps({
     type: Object,
     required: true,
   },
+  books: {
+    type: Array,
+    required: true,
+    default: () => [],
+  },
 });
-const books = ref([
-  {
-    id: "1",
-    image: "/uploads/book1.png",
-    title: "Скепсис",
-    price: 90,
-    oldPrice: 100,
-  },
-  {
-    id: "2",
-    image: "/uploads/book1.png",
-    title: "Скепсис",
-    price: 90,
-    oldPrice: 100,
-  },
-  {
-    id: "3",
-    image: "/uploads/book1.png",
-    title: "Скепсис",
-    price: 90,
-    oldPrice: 100,
-  },
-  {
-    id: "4",
-    image: "/uploads/book1.png",
-    title: "Скепсис",
-    price: 90,
-    oldPrice: 100,
-  },
-]);
 </script>

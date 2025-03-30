@@ -97,6 +97,4 @@ const addToCart = (productId) => {
     $toast.error("Не вдалося додати до корзини.");
   }
 };
-
-console.log("Fetched book data:", bookData.value);
 </script>

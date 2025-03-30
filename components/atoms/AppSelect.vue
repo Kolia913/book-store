@@ -15,7 +15,9 @@
         class="input w-full border border-[#b4b4b4] bg-white rounded-xl p-3 focus:outline-none focus:ring-2 focus:border-transparent"
         @search="handleSearch"
       >
+        <template v-slot:no-options>Результатів не знайдено.</template>
       </v-select>
+
       <div v-if="error" class="text-red-500 text-sm absolute top-[100%]">
         {{ error }}
       </div>

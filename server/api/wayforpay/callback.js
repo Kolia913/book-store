@@ -2,7 +2,7 @@ import { Purchase } from "~/server/database/models/Purchase";
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
-
+  console.log("Wayforpay callback received:", JSON.stringify(body, null, 2));
   const merchantSignature = body.merchantSignature;
   const calculatedSignature = createWayforpaySignature(body);
 
@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
 
   const purchase = await Purchase.findOne({
     where: {
-      id: body.orderReference,
+      wayforpay_reference: body.wayforpay_reference,
     },
   });
 

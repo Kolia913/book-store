@@ -7,7 +7,10 @@ export default defineEventHandler(async (event) => {
     if (
       !body?.orderReference ||
       !body?.amount ||
-      !Array.isArray(body?.cartItems)
+      !Array.isArray(body?.cartItems) ||
+      !body?.clientFirstName ||
+      !body?.clientLastName ||
+      !body?.clientPhone
     ) {
       throw createError({
         statusCode: 400,
@@ -16,7 +19,14 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    const { orderReference, amount, cartItems } = body;
+    const {
+      orderReference,
+      amount,
+      cartItems,
+      clientFirstName,
+      clientLastName,
+      clientPhone,
+    } = body;
 
     for (const item of cartItems) {
       if (!item?.title || !item?.quantity || item?.cost === undefined) {
@@ -45,6 +55,7 @@ export default defineEventHandler(async (event) => {
         });
       }
     }
+
     const productNames = cartItems.map((item) => item.title);
     const productCounts = cartItems.map((item) => item.quantity);
     const productPrices = cartItems.map((item) => item.cost);
@@ -53,7 +64,7 @@ export default defineEventHandler(async (event) => {
     const domainName = "obert.com.ua";
 
     const signatureString = [
-      runtimeConfig.wayforpayMerchantLogin,
+      requiredConfig.merchantAccount,
       domainName,
       orderReference,
       paymentDate,
@@ -63,32 +74,34 @@ export default defineEventHandler(async (event) => {
       ...productCounts,
       ...productPrices,
     ].join(";");
-    console.log("Sekretik:", runtimeConfig.wayforpaySecretKey);
-
-    console.log("WayForPay Signature String:", signatureString);
 
     function generateHmacMd5(string, key) {
       return crypto.createHmac("md5", key).update(string).digest("hex");
     }
+
     const merchantSignature = generateHmacMd5(
       signatureString,
-      runtimeConfig.wayforpaySecretKey
+      requiredConfig.secretKey
     );
 
-    console.log("WayForPay Merchant Signature:", merchantSignature);
     return {
-      paymentData: {
+      widgetData: {
         merchantAccount: requiredConfig.merchantAccount,
         merchantDomainName: domainName,
+        authorizationType: "SimpleSignature",
+        merchantSignature,
         orderReference,
         orderDate: paymentDate,
         amount,
         currency: "UAH",
         productName: productNames,
-        productCount: productCounts,
         productPrice: productPrices,
-        merchantSignature,
+        productCount: productCounts,
+        clientFirstName,
+        clientLastName,
+        clientPhone,
         serviceUrl: requiredConfig.serviceUrl,
+        language: "UA",
       },
     };
   } catch (error) {

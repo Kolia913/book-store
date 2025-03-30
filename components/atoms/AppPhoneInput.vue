@@ -57,12 +57,12 @@ const phoneCodes = ref([
     code: "+38# ## ### ## ##",
     icon: IconsIconSlavaUkraine,
   },
-  {
-    id: 2,
-    country: "Germany",
-    code: "+49 ### ######",
-    icon: IconsIconGermanFlag,
-  },
+  // {
+  //   id: 2,
+  //   country: "Germany",
+  //   code: "+49 ### ######",
+  //   icon: IconsIconGermanFlag,
+  // },
 ]);
 
 watch(selectedCode, (newCode) => {
