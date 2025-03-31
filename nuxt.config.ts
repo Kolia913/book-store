@@ -13,14 +13,23 @@ export default defineNuxtConfig({
         "connect-src": [
           "'self'",
           "https://secure.wayforpay.com",
-          "https://api.novaposhta.ua"
+          "https://api.novaposhta.ua",
+          "https://widget.wayforpay.com"
         ],
-        "form-action": ["'self'", "https://secure.wayforpay.com"],
-        "frame-src": ["'self'", "https://secure.wayforpay.com"],
+        "form-action": [
+          "'self'",
+           "https://secure.wayforpay.com",
+          "https://widget.wayforpay.com"
+        ],
+        "frame-src": [
+          "'self'",
+           "https://secure.wayforpay.com",
+          "https://widget.wayforpay.com"],
         "script-src": [
           "'self'",
           "'unsafe-inline'",
           "https://secure.wayforpay.com",
+          "https://widget.wayforpay.com"
         ],
       },
     },
