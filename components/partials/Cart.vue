@@ -1,7 +1,7 @@
 <template>
   <div class="cart-wrapper">
     <div
-      @click="$emit('close')"
+      @click="emit('close')"
       class="fixed inset-0 bg-[#00000054] w-[100vw] h-[100vh] z-[100]"
     ></div>
     <Transition name="slide-fade">
@@ -90,13 +90,13 @@ const cartItemTranslations = computed(() => ({
 
 const { $toast } = useNuxtApp();
 
-defineEmits(["close"]);
+const emit = defineEmits(["close"]);
 
 const deleteAllBooks = () => {
   try {
     cartStore.clearCart();
     $toast.success("Корзина очищена!");
-    $emit("close");
+    emit("close");
   } catch (error) {
     console.error("Error clearing the cart:", error);
     $toast.error("Не вдалося очистити корзину.");

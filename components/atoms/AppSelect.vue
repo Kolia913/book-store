@@ -25,7 +25,8 @@
   </div>
 </template>
 <script setup>
-import { debounce } from "lodash";
+import _ from 'lodash';
+const debounce = _.debounce;
 
 defineProps([
   "options",
