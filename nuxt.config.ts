@@ -9,6 +9,11 @@ export default defineNuxtConfig({
   security: {
     headers: {
       contentSecurityPolicy: {
+        "default-src": ["'self'"],
+        "connect-src": [
+          "'self'",
+          "https://secure.wayforpay.com",
+        ],
         "form-action": ["'self'", "https://secure.wayforpay.com"],
         "frame-src": ["'self'", "https://secure.wayforpay.com"],
         "script-src": [
