@@ -171,7 +171,10 @@
             color="black"
             @click="handleOrder"
           />
-          <div class="text-center cursor-pointer hover:underline">
+          <div
+            class="text-center cursor-pointer hover:underline"
+            @click="() => $router.push('/')"
+          >
             {{ pageData?.content?.buttons?.continue_shopping?.value }}
           </div>
         </div>

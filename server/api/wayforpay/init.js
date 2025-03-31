@@ -102,6 +102,7 @@ export default defineEventHandler(async (event) => {
         clientPhone,
         serviceUrl: requiredConfig.serviceUrl,
         language: "UA",
+        straightWidget: true,
       },
     };
   } catch (error) {

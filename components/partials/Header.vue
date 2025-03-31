@@ -102,7 +102,7 @@
           <template #icon>
             <div
               v-if="cartCount > 0"
-              class="absolute left-24 bg-black rounded-[50%] w-8 h-8 flex justify-center items-center"
+              class="absolute left-20 bg-black rounded-[50%] w-8 h-8 flex justify-center items-center"
             >
               {{ cartCount }}
             </div>
