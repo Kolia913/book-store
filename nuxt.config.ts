@@ -17,6 +17,11 @@ export default defineNuxtConfig({
           "https://widget.wayforpay.com",
           "https://api.novaposhta.ua"
         ],
+        "form-action": [
+          "'self'",
+          "https://secure.wayforpay.com", 
+          "https://widget.wayforpay.com"   
+        ],
         "frame-src": [
           "'self'",
           "https://secure.wayforpay.com",
