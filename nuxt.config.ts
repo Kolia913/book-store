@@ -6,47 +6,7 @@ export default defineNuxtConfig({
   pinia: {
     storesDirs: ["./stores/**"],
   },
-  security: {
-    headers: {
-      contentSecurityPolicy: {
-        "default-src": ["'self'"],
-        "connect-src": [
-          "'self'",
-          "https://secure.wayforpay.com",
-          "https://api.wayforpay.com",
-          "https://widget.wayforpay.com",
-          "https://api.novaposhta.ua"
-        ],
-        "form-action": [
-          "'self'",
-          "https://secure.wayforpay.com", 
-          "https://widget.wayforpay.com"   
-        ],
-        "frame-src": [
-          "'self'",
-          "https://secure.wayforpay.com",
-          "https://widget.wayforpay.com"
-        ],
-        "script-src": [
-          "'self'",
-          "'unsafe-inline'", 
-          "'unsafe-eval'",  
-          "https://secure.wayforpay.com",
-          "https://widget.wayforpay.com"
-        ],
-        "style-src": [
-          "'self'",
-          "'unsafe-inline'", 
-          "https://secure.wayforpay.com"
-        ],
-        "img-src": [
-          "'self'",
-          "data:",
-          "https://secure.wayforpay.com"
-        ]
-      }
-    }
-  },
+ 
   routeRules: {
     "/api/**": {
       security: {
