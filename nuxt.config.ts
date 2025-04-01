@@ -6,7 +6,13 @@ export default defineNuxtConfig({
   pinia: {
     storesDirs: ["./stores/**"],
   },
- 
+ security:{
+  headers:{
+    contentSecurityPolicy:{
+      "form-action": ["'self'", "https://secure.wayforpay.com", "https://widget.wayforpay.com"],
+    }
+  }
+ },
   routeRules: {
     "/api/**": {
       security: {
