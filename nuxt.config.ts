@@ -12,7 +12,6 @@ export default defineNuxtConfig({
       "form-action": ["'self'", "https://secure.wayforpay.com", "https://widget.wayforpay.com"],
       "script-src":[
         "'self'",
-        "'unsafe-inline'", 
         "https://secure.wayforpay.com",
         "https://widget.wayforpay.com"]
     }
@@ -28,6 +27,16 @@ export default defineNuxtConfig({
         },
       },
     },
+    '/api/wayforpay/**': {
+        cors: true,
+        headers: {
+          'Access-Control-Allow-Origin': 'https://obert.com.ua',
+          'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+          'Access-Control-Allow-Credentials': 'true',
+          'X-Frame-Options': 'ALLOW-FROM https://secure.wayforpay.com',
+        },
+      },
   },
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
