@@ -6,7 +6,7 @@
     ></div>
     <Transition name="slide-fade">
       <div
-        class="fixed right-0 bottom-0 lg:top-0 h-fit lg:h-[100vh] bg-white w-full lg:w-[700px] z-[1000]"
+        class="fixed right-0 bottom-0 lg:top-0 h-auto lg:h-[100vh] bg-white w-full lg:w-[700px] z-[1000]"
       >
         <div
           class="flex justify-between items-center p-4 border-b border-[#D9D9D9]"
