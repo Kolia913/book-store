@@ -13,27 +13,35 @@ export default defineNuxtConfig({
         "connect-src": [
           "'self'",
           "https://secure.wayforpay.com",
-          "https://api.novaposhta.ua",
-          "https://widget.wayforpay.com"
-        ],
-        "form-action": [
-          "'self'",
-           "https://secure.wayforpay.com",
-          "https://widget.wayforpay.com"
+          "https://api.wayforpay.com",
+          "https://widget.wayforpay.com",
+          "https://api.novaposhta.ua"
         ],
         "frame-src": [
           "'self'",
-           "https://secure.wayforpay.com",
-          "https://widget.wayforpay.com"],
-        "script-src": [
-          "'self'",
-          "'unsafe-inline'",
           "https://secure.wayforpay.com",
           "https://widget.wayforpay.com"
         ],
-      },
-    },
-  },
+        "script-src": [
+          "'self'",
+          "'unsafe-inline'", 
+          "'unsafe-eval'",  
+          "https://secure.wayforpay.com",
+          "https://widget.wayforpay.com"
+        ],
+        "style-src": [
+          "'self'",
+          "'unsafe-inline'", 
+          "https://secure.wayforpay.com"
+        ],
+        "img-src": [
+          "'self'",
+          "data:",
+          "https://secure.wayforpay.com"
+        ]
+      }
+    }
+  }
   routeRules: {
     "/api/**": {
       security: {
