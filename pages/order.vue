@@ -280,8 +280,11 @@ const { data: pageData } = await useAsyncData("pagesData", () => {
 });
 const { $toast } = useNuxtApp();
 const cartForOrder = ref([]);
+const wayforpay = ref(null);
 
-onMounted(() => {
+onMounted(async () => {
+  const { $wayforpay } = useNuxtApp();
+  wayforpay.value = await $wayforpay.load();
   const cartData = localStorage.getItem("cartForOrder");
   if (cartData) {
     cartForOrder.value = JSON.parse(cartData);
@@ -462,10 +465,10 @@ const handleOrder = async () => {
         throw new Error("Не вдалося ініціалізувати платіж");
       }
 
-      const { $wayforpay } = useNuxtApp();
-      const wayforpay = await $wayforpay.load();
+      // const { $wayforpay } = useNuxtApp();
+      // const wayforpay = await $wayforpay.load();
 
-      wayforpay.run(
+      wayforpay.value.run(
         paymentResponse.widgetData,
         (response) => {
           console.log("Payment approved:", response);
