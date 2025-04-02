@@ -280,11 +280,10 @@ const { data: pageData } = await useAsyncData("pagesData", () => {
 });
 const { $toast } = useNuxtApp();
 const cartForOrder = ref([]);
-const wayforpay = ref(null);
 
 onMounted(async () => {
-  const { $wayforpay } = useNuxtApp();
-  wayforpay.value = await $wayforpay.load();
+  // const { $wayforpay } = useNuxtApp();
+  // wayforpay.value = await $wayforpay.load();
   const cartData = localStorage.getItem("cartForOrder");
   if (cartData) {
     cartForOrder.value = JSON.parse(cartData);
@@ -467,8 +466,8 @@ const handleOrder = async () => {
 
       // const { $wayforpay } = useNuxtApp();
       // const wayforpay = await $wayforpay.load();
-
-      wayforpay.value.run(
+      var wayforpay = new Wayforpay(); 	
+      wayforpay.run(
         paymentResponse.widgetData,
         (response) => {
           console.log("Payment approved:", response);
