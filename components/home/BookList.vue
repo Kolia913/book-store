@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="pageData?.isActive"
-    class="px-[50px] mb-[186px] pt-[50px] xl:pt-[138px]"
+    class="px-[50px] pt-[50px]"
     id="books"
   >
     <h4 class="app-text-h1 w-full mt-12 mb-[30px]">
@@ -13,7 +13,7 @@
   </div>
 </template>
 <script setup>
-defineProps({
+const props = defineProps({
   books: {
     required: true,
     type: Array,
@@ -23,4 +23,8 @@ defineProps({
     required: true,
   },
 });
+const translationsStore = useTranslationsStore();
+if(!props?.pageData?.isActive) {
+    translationsStore.setHeaderLinkInactive("#books");
+}
 </script>

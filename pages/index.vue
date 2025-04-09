@@ -1,13 +1,14 @@
 <template>
   <HomeBanner :pageData="pages.content.banner" />
-  <HomeHistory :data="translations" :pageData="pages.content.history" />
+  <HomeBookList :books="books" :pageData="pages.content.books" />
   <HomeAnouncment :data="translations" :pageData="pages.content.announcement" />
   <HomeDiscount
     :data="translations"
     :pageData="pages.content.sale"
     :books="saleBooks"
   />
-  <HomeBookList :books="books" :pageData="pages.content.books" />
+  <HomeHistory :data="translations" :pageData="pages.content.history" />
+
 </template>
 
 <script setup>

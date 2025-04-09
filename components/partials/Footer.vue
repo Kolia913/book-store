@@ -11,11 +11,12 @@
         <li
           v-for="(link, idx) in linksTranslations.links"
           :key="link.href + idx"
-          class="text-lg lg:text-xl cursor-pointer hover:underline duration-200 rounded-3.5xl pb-2"
+          class="text-lg lg:text-xl cursor-pointer hover:underline duration-200 rounded-3.5xl pb-2 relative"
         >
           <NuxtLink :to="link.href">
             {{ link.title }}
           </NuxtLink>
+          
         </li>
       </ul>
       <ul class="flex app-text-body flex-col justify-between">
@@ -25,11 +26,26 @@
         <li
           v-for="(link, idx) in linksTranslations.info"
           :key="link.href + idx"
-          class="text-lg lg:text-xl cursor-pointer hover:underline duration-200 rounded-3.5xl pb-2"
+          class="text-lg lg:text-xl cursor-pointer hover:underline duration-200 rounded-3.5xl pb-2 relative"
+          @click="toggleHint(link.hint)"
         >
-          <NuxtLink :to="link.href">
+          <div>
             {{ link.title }}
-          </NuxtLink>
+          </div>
+          <Transition name="fade">
+          <div
+            v-if="isHintVisible && currentHint === link.hint"
+            class="absolute bottom-full mb-2 bg-white text-black p-4 rounded drop-shadow-2xl text-sm z-50  lg:w-[500px] max-h-[450px] overflow-y-auto lg:max-h-none"
+          >
+            <button
+              class="absolute top-0 right-1 text-black font-bold cursor-pointer p-2"
+              @click.stop="closeHint"
+            >
+              ✕
+            </button>
+            <div class="cursor-default" v-html="hintMessage"></div>
+          </div>
+        </Transition>
         </li>
       </ul>
       <div class="flex flex-col justify-between">
@@ -55,16 +71,45 @@
     </div>
   </footer>
 </template>
+
 <script setup>
+import { ref, computed } from "vue";
+
 const translationsStore = useTranslationsStore();
 
 const linksTranslations = computed(() => translationsStore.getFooterLinks);
 const otherTranslations = computed(
   () => translationsStore.getFooterTranslations
 );
+
+const isHintVisible = ref(false);
+const hintMessage = ref("");
+const currentHint = ref("");
+
+const toggleHint = (message) => {
+    
+ 
+    hintMessage.value = message;
+    currentHint.value = message;
+    isHintVisible.value = true;
+  
+};
+
+const closeHint = () => {
+  isHintVisible.value = false;
+  currentHint.value = "";
+};
+
+
 </script>
-<style scoped>
-.bg-footer-pattern {
-  background-image: url("/path/to/your/footer-background.jpg");
+<style>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

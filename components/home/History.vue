@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="pageData?.isActive"
-    class="flex justify-start flex-col-reverse lg:flex-row items-stretch gap-12 lg:gap-0 pt-[50px] xl:pt-[138px]"
+    class="flex justify-start flex-col-reverse lg:flex-row items-stretch gap-12 lg:gap-0 pt-[50px] mb-[186px] xl:pt-[138px]"
     id="story"
   >
     <div class="flex-1">
@@ -33,7 +33,7 @@
   </div>
 </template>
 <script setup>
-defineProps({
+const props = defineProps({
   data: {
     type: Object,
     required: true,
@@ -43,6 +43,10 @@ defineProps({
     required: true,
   },
 });
+const translationsStore = useTranslationsStore();
+if(!props?.pageData?.isActive) {
+    translationsStore.setHeaderLinkInactive("#story");
+}
 </script>
 <style scoped>
 @media (min-width: 1024px) {

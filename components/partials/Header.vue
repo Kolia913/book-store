@@ -27,6 +27,7 @@
             link.href === `#${currentAnchor}` && !isNavWhite,
           'bg-white text-black':
             isNavWhite && link.href === `#${currentAnchor}`,
+            'hidden': !link.isActive,
         }"
         @click="() => navigate(link.href)"
       >
@@ -66,6 +67,7 @@
       'text-white': !isScrolled && isNavWhite && !isNavShown,
       'text-black': !isNavWhite && !isScrolled,
       'text-black bg-white': isNavShown && isNavWhite,
+
     }"
   >
     <div class="w-full flex justify-between flex-row z-55">
@@ -84,6 +86,8 @@
           class="w-full flex justify-between px-1 py-1 text-3xl cursor-pointer border-b-1 hover:underline duration-200 text-black"
           :class="{
             'bg-black text-white': link.href === currentAnchor,
+            'hidden': !link.isActive,
+
           }"
           @click="() => navigate(link.href)"
         >
