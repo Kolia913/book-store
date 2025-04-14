@@ -1,6 +1,6 @@
 <template>
   <div
-    class="py-[38px] px-4 pt-25 lg:px-12 lg:py-50 xl:py-60 flex flex-col xl:flex-row xl:gap-8 justify-between"
+    class="py-[38px] px-4 pt-25 lg:px-12 lg:py-50 xl:py-42 2xl:py-60 flex flex-col 2xl:flex-row xl:gap-8 justify-between xl:items-center "
   >
     <div class="flex flex-col lg:flex-row gap-12 items-center">
       <div
@@ -18,7 +18,7 @@
         </div>
         <img :src="bookData.images[0]" class="w-full max-w-[400px] h-full" />
       </div>
-      <div class="w-full xl:w-[500px] 2xl:w-[550px] self-start xl:self-center">
+      <div class="w-full xl:w-[600px] 2xl:w-[550px] self-start xl:self-center">
         <div class="app-text-h1 mb-[20px] italic">
           {{ bookData.page_desc_caption }}
         </div>
@@ -28,15 +28,15 @@
       </div>
     </div>
     <div
-      class="flex flex-col justify-between text-black text-left xl:items-end xl:text-right z-20 mt-8 xl:mt-0"
+      class="flex flex-col justify-between text-black text-left 2xl:items-end 2xl:text-right z-20 mt-8 xl:mt-10 2xl:mt-0"
     >
       <div class="text-4xl my-[20px] xl:mt-0 xl:text-3xl 2xl:text-4xl italic">
         {{ bookData.author }} <br />
         <span class="uppercase">{{ bookData.title }}</span>
       </div>
 
-      <div class="flex w-full flex-col md:flex-row xl:flex-col gap-8 xl:gap-4">
-        <div class="w-full xl:w-[280px] 2xl:w-[380px] self-end">
+      <div class="flex w-full flex-col md:flex-row 2xl:flex-col gap-8 xl:gap-10 2xl:gap-4">
+        <div class="w-full xl:w-[420px] 2xl:w-[380px] self-end">
           <div class="flex items-center justify-between pb-2">
             <span v-if="bookData.is_available" class="text-lg italic"
               >в наявності</span
@@ -53,7 +53,7 @@
             @click="addToCart(bookData.id)"
           />
         </div>
-        <div class="w-full xl:w-[280px] 2xl:w-[380px] self-end">
+        <div class="w-full xl:w-[420px] 2xl:w-[380px] self-end">
           <div class="flex items-center justify-between pb-2">
             <span v-if="bookData.is_available" class="text-lg italic"
               >в наявності</span

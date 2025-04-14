@@ -66,7 +66,7 @@ const props = defineProps({
   },
 });
 const translationsStore = useTranslationsStore();
-if(!props?.pageData?.isActive) {
+if(!props?.pageData?.isActive || props?.books?.length === 0) {
     translationsStore.setHeaderLinkInactive("#sale");
 }
 

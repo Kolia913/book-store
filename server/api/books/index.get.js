@@ -8,11 +8,11 @@ export default defineEventHandler(async (event) => {
       whereList.is_on_sale = query.is_on_sale == "true";
     }
 
-    if (query.draft) {
-      whereList.draft = query.draft == "true";
-    } else {
-      whereList.draft = false;
-    }
+    // if (query.draft) {
+    //   whereList.draft = query.draft == "true";
+    // } else {
+    //   whereList.draft = false;
+    // }
     // == should be there 🙂
     const books = await Book.findAll({
       where: whereList,

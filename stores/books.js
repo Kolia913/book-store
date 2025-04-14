@@ -6,8 +6,8 @@ export const useBooksStore = defineStore("books", {
     async fetchBooks() {
       try {
         const res = await $fetch("/api/books");
-        this.books = res;
-        return res;
+        this.books = res.filter(book => !book.draft);
+        return this.books;
       } catch (error) {
         throw error;
       }
