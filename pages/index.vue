@@ -8,7 +8,7 @@
     :books="saleBooks"
   />
   <HomeHistory :data="translations" :pageData="pages.content.history" />
-  <HomeEvents :events="events"/>
+  <HomeEvents :events="events" :pageData="pages.content.events"/>
 </template>
 
 <script setup>

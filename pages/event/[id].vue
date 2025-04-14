@@ -72,10 +72,7 @@ const eventId = route.params.id;
 const { data: eventData } = await useAsyncData(`eventData${eventId}`, () => {
   return eventStore.fetchEventsById(eventId);
 });
-const isEventEnded = computed(() => {
-  if (!eventData.value?.event_end) return false;
- 
-});
+
 
 
 </script>
