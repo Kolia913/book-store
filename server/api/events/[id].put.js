@@ -7,10 +7,12 @@ const schema = Joi.object({
   description: Joi.string().allow(null, "").optional(),
   tickets_available: Joi.boolean().default(false).optional(),
   event_end: Joi.boolean().default(false).optional(),
+  images: Joi.array().max(4).optional(),
  
 });
 
 export default defineEventHandler(async (event) => {
+  let images = [];
   try {
     const id = getRouterParam(event, "id");
     if (!Number.isInteger(+id)) {
@@ -18,7 +20,7 @@ export default defineEventHandler(async (event) => {
       return createError({
         statusCode: 400,
         statusMessage: "Bad Request",
-        message: "Invalid book id",
+        message: "Invalid event id",
       }).toJSON();
     }
 
@@ -26,14 +28,41 @@ export default defineEventHandler(async (event) => {
     if (!events) {
       setResponseStatus(event, 404);
       return createError({
-        message: "Book not found",
+        message: "Event not found",
         statusCode: 404,
         statusMessage: "Not Found",
       }).toJSON();
     }
-    const body = await readBody(event);
-    const { error, value } = schema.validate(body);
+    const body = await readMultipartFormData(event);
+    const imagesToUpload = [];
+    const data = {};
+    if (body) {
+      for (const item of body) {
+        if (item.name === "images") {
+          imagesToUpload.push(item);
+        } else {
+          data[item.name] = item.data.toString();
+        }
+      }
+    }
+
+    const oldImages =
+      events.images === null ? [] : events.images.filter((img) => !!img);
+
+    if (imagesToUpload?.length) {
+      const bulkAdditionResult = await replaceFiles(oldImages, imagesToUpload);
+      images = bulkAdditionResult.paths;
+    }
+
+    if (images.length) {
+      data.images = images;
+    } else {
+      data.images = events.images;
+    }
+
+    const { error, value } = schema.validate(data);
     if (error) {
+      imagesToUpload?.length && bulkRemoveFiles(images);
       setResponseStatus(event, 422);
       return createError({
         message: error.details[0].message,
@@ -41,8 +70,8 @@ export default defineEventHandler(async (event) => {
         statusMessage: "Unprocessable Entity",
       }).toJSON();
     }
-
     await events.update(value);
+
     setResponseStatus(event, 200);
     return events;
   } catch (err) {

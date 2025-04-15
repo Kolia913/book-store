@@ -1,7 +1,7 @@
 <template>
     <div
       v-if="pageData?.isActive"
-      class="px-[50px] py-[50px] "
+      class="px-[50px] pb-[50px]"
       id="events"
     >
       <h4 class="app-text-h1 w-full mt-12 mb-[30px]">

@@ -28,7 +28,11 @@ Event.init(
         type: DataTypes.BOOLEAN,
         allowNull: true,
         defaultValue: false,
-    }
+    },
+    images: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      allowNull: true,
+    },
   },
   {
     sequelize,

@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="pageData?.isActive"
-    class="flex justify-start flex-col-reverse lg:flex-row items-stretch gap-12 lg:gap-0 pt-[50px] mb-[186px] xl:pt-[138px]"
+    class="flex justify-start flex-col-reverse lg:flex-row items-stretch gap-12 lg:gap-0 pt-[50px] mb-[150px] xl:pt-[138px]"
     id="story"
   >
     <div class="flex-1">

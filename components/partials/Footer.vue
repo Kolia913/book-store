@@ -35,7 +35,7 @@
           <Transition name="fade">
           <div
             v-if="isHintVisible && currentHint === link.hint"
-            class="absolute bottom-full mb-2 bg-white text-black p-4 rounded drop-shadow-2xl text-sm z-50  lg:w-[500px] max-h-[450px] overflow-y-auto lg:max-h-none"
+            class="absolute bottom-full mb-2 bg-white text-black p-4 rounded drop-shadow-2xl text-sm z-50  lg:w-[500px] max-h-[350px] overflow-y-auto "
           >
             <button
               class="absolute top-0 right-1 text-black font-bold cursor-pointer p-2"
