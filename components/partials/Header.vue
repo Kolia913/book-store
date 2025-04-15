@@ -85,7 +85,7 @@
           :key="link.href + idx"
           class="w-full flex justify-between px-1 py-1 text-3xl cursor-pointer border-b-1 hover:underline duration-200 text-black"
           :class="{
-            'bg-black text-white': link.href === currentAnchor,
+            'bg-black text-white': link.href === `#${currentAnchor}`,
             'hidden': !link.isActive,
 
           }"
@@ -165,9 +165,13 @@ function scrollTo(anchor) {
 
 function navigate(anchor) {
   if (isNavShown.value) isNavShown.value = false;
-  currentAnchor.value = anchor;
-  if (route.path !== "/") {
-    router.push("/").then(scrollTo(anchor));
+
+  if (route.path !== '/') {
+    router.push({ path: '/', hash: anchor }).then(() => {
+      nextTick(() => {
+        scrollTo(anchor);
+      });
+    });
   } else {
     scrollTo(anchor);
   }

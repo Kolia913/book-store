@@ -12,13 +12,29 @@
         <p class="app-text-small leading-relaxed mt-4 mb-12 lg:mb-0">
           {{ eventData.description }}
         </p>
-        <div class="flex items-center justify-between pb-2 pt-12">
+        <div class="flex flex-col justify-between pb-2 pt-12">
           <span v-if="eventData.tickets_available" class="text-2xl font-medium italic"
             >Квитки є в наявності</span
           >
           <span v-else class="text-2xl font-medium italic text-primary-red"
             >Немає вільних місць</span
           >
+          <NuxtLink
+            to="https://t.me/grigoryobertailo"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+          <AtomsAppOutlinedButton
+            value="Забронювати"
+            color="black"
+            class="text-lg uppercase mt-4 "
+            :class="{
+              'bg-gray-300 opacity-35 pointer-events-none ':
+                !eventData.tickets_available,
+            }"
+           
+          />
+          </NuxtLink>
         </div>
        
       </div>

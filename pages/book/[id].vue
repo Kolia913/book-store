@@ -44,12 +44,17 @@
             <span v-else class="text-lg italic text-primary-red"
               >немає в наявності</span
             >
-            <span class="text-2xl">{{ bookData.price }} ₴</span>
+            <span v-if="bookData.discount_price" class="text-2xl"> {{ bookData.discount_price }} ₴ <span class="text-xl line-through text-[#7E827D] pl-2">{{ bookData.price }} ₴</span> </span>
+            <span v-else class="text-2xl">{{ bookData.price }} ₴</span>
+           
           </div>
           <AtomsAppOutlinedButton
             value="купити"
             color="black"
             class="text-lg w-full uppercase"
+            :class="{
+              'opacity-30 pointer-events-none': !bookData.is_available,
+            }"
             @click="addToCart(bookData.id)"
           />
         </div>
@@ -61,7 +66,8 @@
             <span v-else class="text-lg italic text-primary-red"
               >немає в наявності</span
             >
-            <span class="text-2xl">{{ bookData.price_with_signature }} ₴</span>
+            <span v-if="bookData.discount_price_with_signature" class="text-2xl"> {{ bookData.discount_price_with_signature }} ₴ <span class="text-xl line-through text-[#7E827D] pl-2">{{ bookData.price_with_signature }} ₴</span> </span>
+            <span v-else class="text-2xl">{{ bookData.price_with_signature }} ₴</span>
           </div>
           <NuxtLink
             to="https://t.me/grigoryobertailo"
@@ -72,6 +78,9 @@
               value="купити з підписом автора"
               color="filled"
               class="text-lg w-full uppercase"
+              :class="{
+              'opacity-30 pointer-events-none': !bookData.is_available,
+            }"
             />
           </NuxtLink>
         </div>
