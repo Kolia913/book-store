@@ -13,9 +13,11 @@
           :key="link.href + idx"
           class="text-lg lg:text-xl cursor-pointer hover:underline duration-200 rounded-3.5xl pb-2 relative"
         >
-          <NuxtLink :to="link.href">
+          <div @click="() => navigate(link.href)"> 
             {{ link.title }}
-          </NuxtLink>
+          </div>
+           
+         
           
         </li>
       </ul>
@@ -81,6 +83,8 @@ const linksTranslations = computed(() => translationsStore.getFooterLinks);
 const otherTranslations = computed(
   () => translationsStore.getFooterTranslations
 );
+const route = useRoute();
+const router = useRouter();
 
 const isHintVisible = ref(false);
 const hintMessage = ref("");
@@ -94,7 +98,24 @@ const toggleHint = (message) => {
     isHintVisible.value = true;
   
 };
+function scrollTo(anchor) {
+  const element = document.querySelector(anchor);
+  if (element) {
+    element.scrollIntoView({ behavior: "smooth" });
+  }
+}
+function navigate(anchor) {
 
+  if (route.path !== '/') {
+    router.push({ path: '/', hash: anchor }).then(() => {
+      nextTick(() => {
+        scrollTo(anchor);
+      });
+    });
+  } else {
+    scrollTo(anchor);
+  }
+}
 const closeHint = () => {
   isHintVisible.value = false;
   currentHint.value = "";

@@ -182,7 +182,7 @@
 
       <!-- Спосіб оплати -->
       <div
-        class="md:col-span-6 order-2 md:order-none h-[230px] bg-[#E9E9E9] rounded-3.5xl relative p-4 sm:p-6 md:pt-6"
+        class="md:col-span-6 order-2 md:order-none h-fit bg-[#E9E9E9] rounded-3.5xl relative p-4 sm:p-6 md:pt-6"
       >
         <div
           class="absolute z-50 top-3 left-4 sm:left-6 app-text-block-heading"
@@ -196,12 +196,12 @@
             value="Онлайн оплата"
             name="payment-method"
           />
-          <AtomsAppRadioInput
+          <!-- <AtomsAppRadioInput
             v-model="formData.payment"
             :label="pageData?.content?.payment_data?.on_delivery?.value"
             value="Готівкою при отриманні"
             name="payment-method"
-          />
+          /> -->
           <div v-if="errors.payment" class="text-red-500 text-sm">
             {{ errors.payment }}
           </div>

@@ -9,7 +9,7 @@
       'bg-white': isScrolled && !isNavWhite,
     }"
   >
-    <div class="cursor-pointer" @click="() => scrollTo('#hero')">
+    <div class="cursor-pointer" @click="() => router.push('/').then(scrollTo('#hero'))">
       <IconsIconLogo width="150px" height="100%" />
     </div>
     <ul
