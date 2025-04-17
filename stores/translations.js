@@ -1,6 +1,8 @@
 export const useTranslationsStore = defineStore("translations", {
   state: () => ({
     translations: {},
+    inactiveLinks: [],
+
   }),
   actions: {
     async fetchTranslations() {
@@ -13,12 +15,10 @@ export const useTranslationsStore = defineStore("translations", {
       }
     },
     setHeaderLinkInactive(href) {
-      const headerLinks = this.getHeaderLinks;
-      const link = headerLinks.find((link) => link.href === href);
-      if (link) {
-        link.isActive = false;
+      if (!this.inactiveLinks.includes(href)) {
+        this.inactiveLinks.push(href);
       }
-    },
+    }
   },
   getters: {
     getHeaderLinks: (state) => {
