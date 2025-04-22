@@ -44,7 +44,7 @@
             <span v-else class="text-lg italic text-primary-red"
               >немає в наявності</span
             >
-            <span v-if="bookData.discount_price" class="text-2xl"> {{ bookData.discount_price }} ₴ <span class="text-xl line-through text-[#7E827D] pl-2">{{ bookData.price }} ₴</span> </span>
+            <span v-if="bookData.discount_price && bookData.is_on_sale" class="text-2xl"> {{ bookData.discount_price }} ₴ <span class="text-xl line-through text-[#7E827D] pl-2">{{ bookData.price }} ₴</span> </span>
             <span v-else class="text-2xl">{{ bookData.price }} ₴</span>
            
           </div>
@@ -66,7 +66,7 @@
             <span v-else class="text-lg italic text-primary-red"
               >немає в наявності</span
             >
-            <span v-if="bookData.discount_price_with_signature" class="text-2xl"> {{ bookData.discount_price_with_signature }} ₴ <span class="text-xl line-through text-[#7E827D] pl-2">{{ bookData.price_with_signature }} ₴</span> </span>
+            <span v-if="bookData.discount_price_with_signature && bookData.is_on_sale" class="text-2xl"> {{ bookData.discount_price_with_signature }} ₴ <span class="text-xl line-through text-[#7E827D] pl-2">{{ bookData.price_with_signature }} ₴</span> </span>
             <span v-else class="text-2xl">{{ bookData.price_with_signature }} ₴</span>
           </div>
           <NuxtLink
