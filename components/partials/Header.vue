@@ -72,10 +72,27 @@
       'text-black bg-white': isNavShown && isNavWhite,
     }"
   >
-    <div class="w-full flex justify-between flex-row z-55">
-      <IconsIconLogo width="100px" height="100%" />
-      <IconsIconCross v-if="isNavShown" width="40px" @click="openNav" />
-      <IconsIconBurger v-else width="40px" @click="openNav" />
+    <div class="w-full flex justify-between items-center flex-row z-55">
+      <IconsIconLogo width="100px" height="100%" @click="() => router.push('/').then(scrollTo('#hero'))"/>
+        <AtomsAppButton
+          v-if="$route.path !== '/order'"
+          value="Кошик"
+          @click="toggleCart"
+          color="red"
+          class="relative scale-80"
+        >
+          <template #icon>
+            <div
+              v-if="cartCount > 0"
+              class="absolute -left-2 top-0 bg-black rounded-[50%] w-7 h-7 flex justify-center items-center"
+            >
+              {{ cartCount }}
+            </div>
+            <IconsCart />
+          </template>
+        </AtomsAppButton>
+      <!-- <IconsIconCross v-if="isNavShown" width="40px" @click="openNav" />
+      <IconsIconBurger v-else width="40px" @click="openNav" /> -->
     </div>
     <Transition name="slide">
       <ul
@@ -96,26 +113,18 @@
           </div>
           <IconsIconArrow width="30px" />
         </li>
-        <AtomsAppButton
-          v-if="$route.path !== '/order'"
-          value="Кошик"
-          @click="toggleCart"
-          color="red"
-          class="w-full mt-4 relative"
-        >
-          <template #icon>
-            <div
-              v-if="cartCount > 0"
-              class="absolute left-20 bg-black rounded-[50%] w-8 h-8 flex justify-center items-center"
-            >
-              {{ cartCount }}
-            </div>
-            <IconsCart />
-          </template>
-        </AtomsAppButton>
+        
       </ul>
     </Transition>
   </nav>
+  <ClientOnly>
+    <Transition name="slide-fade">
+      <PartialsCart
+        v-if="isCartOpen && route.path !== '/order'"
+        @close="toggleCart"
+      />
+    </Transition>
+  </ClientOnly>
 </template>
 
 <script setup>

@@ -9,7 +9,7 @@
           {{ otherTranslations.footer_links_title }}
         </div>
         <li
-          v-for="(link, idx) in linksTranslations.links"
+          v-for="(link, idx) in visibleLinks"
           :key="link.href + idx"
           class="text-lg lg:text-xl cursor-pointer hover:underline duration-200 rounded-3.5xl pb-2 relative"
         >
@@ -83,6 +83,11 @@ const linksTranslations = computed(() => translationsStore.getFooterLinks);
 const otherTranslations = computed(
   () => translationsStore.getFooterTranslations
 );
+const visibleLinks = computed(() => {
+  const allLinks = translationsStore.getHeaderLinks;
+  const inactiveLinks = translationsStore.inactiveLinks || [];
+  return allLinks.filter(link => !inactiveLinks.includes(link.href));
+});
 const route = useRoute();
 const router = useRouter();
 

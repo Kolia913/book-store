@@ -30,10 +30,10 @@
     <div
       class="flex flex-col justify-between text-black text-left 2xl:items-end 2xl:text-right z-20 mt-8 xl:mt-10 2xl:mt-0"
     >
-      <div class="text-4xl my-[20px] xl:mt-0 xl:text-3xl 2xl:text-4xl italic">
+      <!-- <div class="text-4xl my-[20px] xl:mt-0 xl:text-3xl 2xl:text-4xl italic">
         {{ bookData.author }} <br />
         <span class="uppercase">{{ bookData.title }}</span>
-      </div>
+      </div> -->
 
       <div class="flex w-full flex-col md:flex-row 2xl:flex-col gap-8 xl:gap-10 2xl:gap-4">
         <div class="w-full xl:w-[420px] 2xl:w-[380px] self-end">
