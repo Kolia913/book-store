@@ -59,7 +59,7 @@ export const useTranslationsStore = defineStore("translations", {
               state.translations.footer_info_delivery_and_payment ||
               "Доставка та оплата",
             href: "#story",
-            hint: `<div class="font-[700] text-[18px]">Варіанти оплати:</div><br> - Оплата платіжними картами Visa та MasterCard - WayForPay<br> - Післяплата Новою Поштою <br><br><div class="font-[700] text-[18px]">Доставка у відділення «Нова пошта»</div><br>Зазвичай доставка займає 1-3 днів Вартість доставки розраховується відповідно до тарифів сервісу доставки.<br><br> Ми забезпечуємо швидку доставку товарів по всій країні. Відправлення відбувається щодня.`,
+            hint: `<div class="font-[700] text-[18px]">Варіанти оплати:</div><br> - Оплата платіжними картами Visa та MasterCard - WayForPay<br><div class="font-[700] text-[18px]">Доставка у відділення «Нова пошта»</div><br>Зазвичай доставка займає 1-3 днів Вартість доставки розраховується відповідно до тарифів сервісу доставки.<br><br> Ми забезпечуємо швидку доставку товарів по всій країні. Відправлення відбувається щодня.`,
           },
           {
             title: state.translations.footer_info_cooperation || "Співпраця",
