@@ -91,8 +91,8 @@
             <IconsCart />
           </template>
         </AtomsAppButton>
-      <!-- <IconsIconCross v-if="isNavShown" width="40px" @click="openNav" />
-      <IconsIconBurger v-else width="40px" @click="openNav" /> -->
+      <IconsIconCross v-if="isNavShown" width="40px" @click="openNav" />
+      <IconsIconBurger v-else width="40px" @click="openNav" />
     </div>
     <Transition name="slide">
       <ul
