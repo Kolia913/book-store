@@ -1,23 +1,48 @@
 <template>
   <div
-    class="py-[38px] px-4 pt-25 lg:px-12 lg:py-50 xl:py-42 2xl:py-60 flex flex-col 2xl:flex-row xl:gap-8 justify-between xl:items-center "
+    class="py-[38px] px-4 pt-25 lg:px-12 lg:py-50 xl:py-42 2xl:py-60 flex flex-col 2xl:flex-row xl:gap-8 justify-between xl:items-center"
   >
     <div class="flex flex-col lg:flex-row gap-12 items-center">
       <div
         class="flex flex-col-reverse xl:flex-row justify-center items-center gap-5 w-full max-w-[450px] lg:w-[450px] lg:h-fit z-0"
       >
-        <div
-          class="flex flex-row xl:flex-col h-full justify-center gap-9 lg:gap-4 xl:gap-8"
-        >
-          <div v-for="img in bookData.images" :key="img">
+        <div class="flex flex-col gap-4 items-center">
+          <div class="relative cursor-pointer" @click="openGalleryModal" v-if="bookData.images.length > 1">
             <img
-              :src="img"
-              class="cursor-pointer xl:max-w-[100px] max-h-[100px]"
+              :src="bookData.images[0]"
+              class="xl:max-w-[100px] max-h-[100px] rounded"
             />
+            <div
+              v-if="bookData.images.length > 1"
+              class="absolute bottom-1 right-1 bg-black/70 text-white text-xs px-2 py-0.5 rounded"
+            >
+              +{{ bookData.images.length - 1 }}
+            </div>
           </div>
         </div>
-        <img :src="bookData.images[0]" class="w-full max-w-[400px] h-full" />
+
+        <div class="relative w-full max-w-[400px]">
+          <img
+            :src="bookData.images[currentImageIndex]"
+            class="w-full h-full rounded"
+          />
+          <button
+            v-if="currentImageIndex > 0"
+            @click="prevImage"
+            class="absolute top-1/2 left-0 transform -translate-y-1/2 bg-black/50 text-white px-2 py-1"
+          >
+            ‹
+          </button>
+          <button
+            v-if="currentImageIndex < bookData.images.length - 1"
+            @click="nextImage"
+            class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-black/50 text-white px-2 py-1"
+          >
+            ›
+          </button>
+        </div>
       </div>
+
       <div class="w-full xl:w-[600px] 2xl:w-[550px] self-start xl:self-center">
         <div class="app-text-h1 mb-[20px] italic">
           {{ bookData.page_desc_caption }}
@@ -27,7 +52,7 @@
         </p>
       </div>
     </div>
-    <div
+<div
       class="flex flex-col justify-between text-black text-left 2xl:items-end 2xl:text-right z-20 mt-8 xl:mt-10 2xl:mt-0"
     >
       <!-- <div class="text-4xl my-[20px] xl:mt-0 xl:text-3xl 2xl:text-4xl italic">
@@ -86,10 +111,66 @@
         </div>
       </div>
     </div>
+ 
+<div
+  v-if="showGallery"
+  class="fixed top-0 left-0 flex justify-center items-center w-full h-full bg-[#000000d5] z-100 px-2"
+>
+  <button
+    @click="showGallery = false"
+    class="absolute top-6 right-6 text-white text-3xl font-bold cursor-pointer z-150"
+  >
+    ✕
+  </button>
+
+  <div
+    class="flex flex-col sm:flex-row items-center justify-center sm:gap-8 gap-4 w-full max-w-[95vw]"
+  >
+    <div class="cursor-pointer hidden sm:block" @click="prevGalleryImage">
+      <img
+        :src="bookData.images[getWrappedIndex(currentGalleryIndex - 1)]"
+        class="w-24 h-auto rounded opacity-70 hover:opacity-100 transition"
+        alt="Previous image"
+      />
+    </div>
+
+    <img
+      :src="bookData.images[currentGalleryIndex]"
+      class="w-full max-w-[90vw] sm:w-[500px] h-auto rounded shadow-lg border-4 border-white"
+      alt="Current image"
+    />
+
+    <div class="cursor-pointer hidden sm:block" @click="nextGalleryImage">
+      <img
+        :src="bookData.images[getWrappedIndex(currentGalleryIndex + 1)]"
+        class="w-24 h-auto rounded opacity-70 hover:opacity-100 transition"
+        alt="Next image"
+      />
+    </div>
+  </div>
+
+  <div class="flex sm:hidden justify-between w-full px-4 absolute bottom-10">
+    <button
+      @click="prevGalleryImage"
+      class="text-white text-3xl px-3 py-1 bg-black/50 rounded"
+    >
+      ‹
+    </button>
+    <button
+      @click="nextGalleryImage"
+      class="text-white text-3xl px-3 py-1 bg-black/50 rounded"
+    >
+      ›
+    </button>
+  </div>
+</div>
+
+
   </div>
 </template>
 
 <script setup>
+import { ref } from 'vue';
 const route = useRoute();
 const cartStore = useCartStore();
 const bookStore = useBooksStore();
@@ -99,7 +180,43 @@ const bookId = route.params.id;
 const { data: bookData } = await useAsyncData(`bookData${bookId}`, () => {
   return bookStore.fetchBookById(bookId);
 });
+
 const { $toast } = useNuxtApp();
+
+const currentImageIndex = ref(0);
+const showGallery = ref(false);
+const currentGalleryIndex = ref(0);
+
+const nextGalleryImage = () => {
+  currentGalleryIndex.value = getWrappedIndex(currentGalleryIndex.value + 1);
+};
+
+const prevGalleryImage = () => {
+  currentGalleryIndex.value = getWrappedIndex(currentGalleryIndex.value - 1);
+};
+
+const getWrappedIndex = (index) => {
+  const total = bookData.value.images.length;
+  return (index + total) % total;
+};
+
+const nextImage = () => {
+  if (currentImageIndex.value < bookData.value.images.length - 1) {
+    currentImageIndex.value++;
+  }
+};
+
+const prevImage = () => {
+  if (currentImageIndex.value > 0) {
+    currentImageIndex.value--;
+  }
+};
+
+const openGalleryModal = () => {
+  showGallery.value = true;
+    currentGalleryIndex.value = currentImageIndex.value; 
+
+};
 
 const addToCart = (productId) => {
   try {

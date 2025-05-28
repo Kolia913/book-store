@@ -14,7 +14,7 @@ const schema = Joi.object({
   price_with_signature: Joi.number().required(),
   discount_price: Joi.number().allow(null).optional(),
   discount_price_with_signature: Joi.number().allow(null).optional(),
-  images: Joi.array().max(4).default([]),
+  images: Joi.array().max(20).default([]),
 });
 
 export default defineEventHandler(async (event) => {
