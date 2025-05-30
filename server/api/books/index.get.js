@@ -16,6 +16,7 @@ export default defineEventHandler(async (event) => {
     // == should be there 🙂
     const books = await Book.findAll({
       where: whereList,
+      order: [["createdAt", "ASC"]],
     });
     setResponseStatus(event, 200);
     return books;
