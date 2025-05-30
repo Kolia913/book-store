@@ -15,6 +15,7 @@ const schema = Joi.object({
   discount_price: Joi.number().allow(null).optional(),
   discount_price_with_signature: Joi.number().allow(null).optional(),
   images: Joi.array().max(20).optional(),
+  feedback_images: Joi.array().allow(null).optional(),
 });
 
 export default defineEventHandler(async (event) => {
@@ -41,11 +42,14 @@ export default defineEventHandler(async (event) => {
     }
     const body = await readMultipartFormData(event);
     const imagesToUpload = [];
+    const feedbackImagesToUpload = [];
     const data = {};
     if (body) {
       for (const item of body) {
         if (item.name === "images") {
           imagesToUpload.push(item);
+        } else if (item.name === "feedback_images") {
+          feedbackImagesToUpload.push(item);
         } else {
           data[item.name] = item.data.toString();
         }
@@ -54,16 +58,33 @@ export default defineEventHandler(async (event) => {
 
     const oldImages =
       book.images === null ? [] : book.images.filter((img) => !!img);
+    const oldFeedbackImages =
+      book.feedback_images === null
+        ? []
+        : book.feedback_images.filter((img) => !!img);
 
     if (imagesToUpload?.length) {
       const bulkAdditionResult = await replaceFiles(oldImages, imagesToUpload);
       images = bulkAdditionResult.paths;
     }
-
     if (images.length) {
       data.images = images;
     } else {
       data.images = book.images;
+    }
+
+    let feedback_images = [];
+    if (feedbackImagesToUpload?.length) {
+      const feedbackBulkAdditionResult = await replaceFiles(
+        oldFeedbackImages,
+        feedbackImagesToUpload
+      );
+      feedback_images = feedbackBulkAdditionResult.paths;
+    }
+    if (feedback_images.length) {
+      data.feedback_images = feedback_images;
+    } else {
+      data.feedback_images = book.feedback_images;
     }
 
     const { error, value } = schema.validate(data);

@@ -1,6 +1,6 @@
 import Joi from "joi";
 import { Book } from "~/server/database/models/Book";
-import { bulkAddFiles } from "~/server/utils/fileStorage";
+import { bulkAddFiles, bulkRemoveFiles } from "~/server/utils/fileStorage";
 
 const schema = Joi.object({
   author: Joi.string().max(512).required(),
@@ -15,17 +15,22 @@ const schema = Joi.object({
   discount_price: Joi.number().allow(null).optional(),
   discount_price_with_signature: Joi.number().allow(null).optional(),
   images: Joi.array().max(20).default([]),
+  feedback_images: Joi.array().allow(null).optional().default([]),
 });
 
 export default defineEventHandler(async (event) => {
   const images = [];
+  const feedback_images = [];
   try {
     const imagesToUpload = [];
+    const feedbackImagesToUpload = [];
     const body = await readMultipartFormData(event);
     const data = {};
     for (const item of body) {
       if (item.name === "images") {
         imagesToUpload.push(item);
+      } else if (item.name === "feedback_images") {
+        feedbackImagesToUpload.push(item);
       } else {
         data[item.name] = item.data.toString();
       }
@@ -33,9 +38,17 @@ export default defineEventHandler(async (event) => {
     const bulkAdditionResult = await bulkAddFiles(imagesToUpload);
     images.push(...bulkAdditionResult.paths);
     data.images = images;
+    if (feedbackImagesToUpload.length) {
+      const feedbackBulkAdditionResult = await bulkAddFiles(
+        feedbackImagesToUpload
+      );
+      feedback_images.push(...feedbackBulkAdditionResult.paths);
+      data.feedback_images = feedback_images;
+    }
     const { error, value } = schema.validate(data);
     if (error) {
       bulkRemoveFiles(images);
+      if (feedback_images.length) bulkRemoveFiles(feedback_images);
       setResponseStatus(event, 422);
       return createError({
         message: error.details[0].message,
@@ -49,6 +62,7 @@ export default defineEventHandler(async (event) => {
   } catch (err) {
     setResponseStatus(event, 500);
     bulkRemoveFiles(images);
+    if (feedback_images.length) bulkRemoveFiles(feedback_images);
     const error = createError({
       message: "Something went wrong",
       statusCode: 500,

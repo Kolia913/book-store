@@ -61,6 +61,10 @@ Book.init(
       type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: true,
     },
+    feedback_images: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      allowNull: true,
+    },
   },
   {
     sequelize,
