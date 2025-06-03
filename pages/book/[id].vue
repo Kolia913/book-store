@@ -1,6 +1,10 @@
 <template>
   <div
     class="py-[38px] px-4 pt-25 lg:px-12 lg:pt-50 xl:pt-42 2xl:pt-60 flex flex-col 2xl:flex-row xl:gap-8 justify-between xl:items-center"
+    :class="{
+      'lg:py-50 xl:py-42 2xl:py-60':
+        !bookData.is_feedback_shown,
+    }"
   >
     <div class="flex flex-col lg:flex-row gap-12 items-center">
       <div
@@ -194,7 +198,7 @@
   </div>
   <div class="w-screen">
 <div
-      v-if="bookData?.feedback_images"
+      v-if="bookData?.feedback_images && bookData?.is_feedback_shown"
       class="w-[95%] xl:w-[80%] m-[auto] md:my-12 flex flex-col gap-8"
     >
       <div class="text-2xl">Відгуки</div>

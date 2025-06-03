@@ -65,6 +65,11 @@ Book.init(
       type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: true,
     },
+    is_feedback_shown: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: false,
+    },
   },
   {
     sequelize,
