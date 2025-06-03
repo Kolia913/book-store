@@ -1,6 +1,6 @@
 <template>
   <div
-    class="py-[38px] px-4 pt-25 lg:px-12 lg:py-50 xl:py-42 2xl:py-60 flex flex-col 2xl:flex-row xl:gap-8 justify-between xl:items-center"
+    class="py-[38px] px-4 pt-25 lg:px-12 lg:pt-50 xl:pt-42 2xl:pt-60 flex flex-col 2xl:flex-row xl:gap-8 justify-between xl:items-center"
   >
     <div class="flex flex-col lg:flex-row gap-12 items-center">
       <div
@@ -136,40 +136,7 @@
         </div>
       </div>
     </div>
-    <div
-      v-if="bookData?.feedback_images"
-      class="w-[100%] xl:w-[80%] mt-12 flex flex-col gap-8"
-    >
-      <div class="text-2xl">Відгуки</div>
-      <div class="relative flex">
-        <button
-          @click="prevFeedbackImage"
-          class="absolute top-[105%] left-0 xl:top-1/2 xl:-left-10 z-10 transform -translate-y-1/2 bg-black/50 text-white px-2 py-1"
-        >
-          ‹
-        </button>
-        <div class="pb-4 flex gap-4 overflow-x-auto scroll-smooth feedcont">
-          <div
-            v-for="(image, index) in bookData?.feedback_images"
-            :key="index"
-            class="min-w-[300px] sm:min-w-[600px] flex items-center justify-center h-full border rounded"
-            style="background: white"
-            @click="showFeedbackGallery = true"
-          >
-            <img
-              :src="image"
-              class="max-h-[500px] w-auto rounded object-contain"
-            />
-          </div>
-        </div>
-        <button
-          @click="nextFeedbackImage"
-          class="absolute top-[105%] right-0 xl:top-1/2 xl:-right-10 z-10 transform -translate-y-1/2 bg-black/50 text-white px-2 py-1"
-        >
-          ›
-        </button>
-      </div>
-    </div>
+    
     <div
       v-if="showFeedbackGallery"
       class="fixed top-0 left-0 flex justify-center items-center w-full h-full bg-[#000000d5] z-100 px-2"
@@ -225,7 +192,42 @@
       </div>
     </div>
   </div>
-
+  <div class="w-screen">
+<div
+      v-if="bookData?.feedback_images"
+      class="w-[95%] xl:w-[80%] m-[auto] md:my-12 flex flex-col gap-8"
+    >
+      <div class="text-2xl">Відгуки</div>
+      <div class="relative flex">
+        <button
+          @click="prevFeedbackImage"
+          class="absolute top-[105%] hidden xl:flex left-0 xl:top-1/2 xl:-left-10 z-10 transform -translate-y-1/2 bg-black/50 text-white px-2 py-1"
+        >
+          ‹
+        </button>
+        <div class="pb-4 flex gap-4 overflow-x-auto scroll-smooth feedcont">
+          <div
+            v-for="(image, index) in bookData?.feedback_images"
+            :key="index"
+            class="min-w-[300px] sm:min-w-[600px] flex items-center justify-center h-full border rounded"
+            style="background: white"
+            @click="showFeedbackGallery = true"
+          >
+            <img
+              :src="image"
+              class="max-h-[500px] w-auto rounded object-contain"
+            />
+          </div>
+        </div>
+        <button
+          @click="nextFeedbackImage"
+          class="absolute top-[105%] hidden xl:flex right-0 xl:top-1/2 xl:-right-10 z-10 transform -translate-y-1/2 bg-black/50 text-white px-2 py-1"
+        >
+          ›
+        </button>
+      </div>
+      </div>
+    </div>
   <div
     v-if="showGallery"
     class="fixed top-0 left-0 flex justify-center items-center w-full h-full bg-[#000000d5] z-100 px-2"
