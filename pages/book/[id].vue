@@ -12,21 +12,25 @@
       >
         <div class="flex flex-col gap-4 items-center">
           <div
-            class="relative cursor-pointer"
-            @click="openGalleryModal"
-            v-if="bookData.images.length > 1"
-          >
-            <img
-              :src="bookData.images[0]"
-              class="xl:max-w-[100px] max-h-[100px] rounded"
-            />
-            <div
-              v-if="bookData.images.length > 1"
-              class="absolute bottom-1 right-1 bg-black/70 text-white text-xs px-2 py-0.5 rounded"
-            >
-              +{{ bookData.images.length - 1 }}
-            </div>
-          </div>
+  class="relative cursor-pointer flex xl:flex-col gap-3"
+  v-if="bookData.images.length > 1"
+>
+  <img
+    v-for="(image, index) in bookData.images.slice(0, 4)"
+    :key="index"
+    :src="image"
+      @click="openGalleryModal(index)"
+
+    class="xl:max-w-[100px] max-h-[100px] rounded"
+  />
+  <div
+    v-if="bookData.images.length > 4"
+    class="absolute bottom-1 right-1 bg-black/70 text-white text-xs px-2 py-0.5 rounded"
+  >
+    +{{ bookData.images.length - 4 }}
+  </div>
+</div>
+
         </div>
 
         <div class="relative w-full max-w-[400px]">
@@ -357,9 +361,9 @@ const prevImage = () => {
   }
 };
 
-const openGalleryModal = () => {
+const openGalleryModal = (startIndex) => {
   showGallery.value = true;
-  currentGalleryIndex.value = currentImageIndex.value;
+  currentGalleryIndex.value = startIndex !== undefined ? startIndex : 0;
 };
 
 const addToCart = (productId) => {
