@@ -17,11 +17,11 @@
         >
           {{ item.title }}
         </h3>
-        <p
-          class="text-gray-600 app-text-body mt-2 line-clamp-8 md:line-clamp-4 lg:line-clamp-5"
+        <div
+          class="text-gray-600 app-text-body mt-2 line-clamp-8 md:line-clamp-4 lg:line-clamp-5" v-html="item.description"
         >
-          {{ item.description }}
-        </p>
+   
+        </div>
       </div>
 
       <!-- Buttons -->

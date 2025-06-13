@@ -46,7 +46,7 @@ export default defineNuxtConfig({
 
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
-  css: ["~/assets/css/main.css"],
+  css: ["~/assets/css/main.css", 'quill/dist/quill.snow.css'],
   runtimeConfig: {
     jwtSecret: process.env.JWT_SECRET,
     wayforpayMerchantLogin: process.env.WAYFORPAY_MERCHANT_LOGIN,

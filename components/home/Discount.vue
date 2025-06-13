@@ -31,7 +31,7 @@
         :key="book?.id"
         class="flex flex-col items-center gap-4"
       >
-        <img :src="book?.images[0]" />
+        <img :src="book?.images[0]" class="max-w-[90%] sm:max-w-[500px]"/>
         <div class="text-4xl uppercase text-center">{{ book?.title }}</div>
         <div class="flex items-end gap-4">
           <div class="app-text-price">{{ book?.discount_price }}₴</div>

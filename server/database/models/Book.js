@@ -70,6 +70,14 @@ Book.init(
       allowNull: true,
       defaultValue: false,
     },
+    keep_images: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      allowNull: true,
+    },
+    keep_feedback_images: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      allowNull: true,
+    },
   },
   {
     sequelize,

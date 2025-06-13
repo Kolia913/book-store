@@ -21,7 +21,7 @@
     :src="image"
       @click="openGalleryModal(index)"
 
-    class="xl:max-w-[100px] max-h-[100px] rounded"
+    class="max-w-[80px] max-h-[100px] rounded"
   />
   <div
     v-if="bookData.images.length > 4"
@@ -59,9 +59,9 @@
         <div class="app-text-h1 mb-[20px] italic">
           {{ bookData.page_desc_caption }}
         </div>
-        <p class="app-text-small leading-relaxed mt-4 mb-12 lg:mb-0">
-          {{ bookData.description }}
-        </p>
+        <div class="app-text-small leading-relaxed mt-4 mb-12 lg:mb-0 ql-editor" v-html="bookData.description">
+        </div>
+      
       </div>
     </div>
     <div
@@ -292,6 +292,7 @@
 
 <script setup>
 import { ref } from "vue";
+
 const route = useRoute();
 const cartStore = useCartStore();
 const bookStore = useBooksStore();
