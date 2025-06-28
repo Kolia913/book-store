@@ -17,7 +17,6 @@ const schema = Joi.object({
   images: Joi.array().max(20).optional(),
   feedback_images: Joi.array().allow(null).optional(),
   is_feedback_shown: Joi.boolean().default(false).optional(),
-  keep_images: Joi.array().max(20).optional(),
 });
 
 export default defineEventHandler(async (event) => {
@@ -45,9 +44,6 @@ export default defineEventHandler(async (event) => {
     const body = await readMultipartFormData(event);
     const imagesToUpload = [];
     const feedbackImagesToUpload = [];
-    const keepImages = [];
-    const keepFeedbackImages = [];
-
     const data = {};
     if (body) {
       for (const item of body) {
@@ -55,28 +51,6 @@ export default defineEventHandler(async (event) => {
           imagesToUpload.push(item);
         } else if (item.name === "feedback_images") {
           feedbackImagesToUpload.push(item);
-        } else if (item.name === "keep_images") {
-          try {
-            const parsed = JSON.parse(item.data.toString());
-            if (Array.isArray(parsed)) {
-              keepImages.splice(0, keepImages.length, ...parsed);
-            }
-          } catch (err) {
-            console.error("Cannot parse keep_images", err);
-          }
-        } else if (item.name === "keep_feedback_images") {
-          try {
-            const parsed = JSON.parse(item.data.toString());
-            if (Array.isArray(parsed)) {
-              keepFeedbackImages.splice(
-                0,
-                keepFeedbackImages.length,
-                ...parsed
-              );
-            }
-          } catch (err) {
-            console.error("Cannot parse keep_feedback_images", err);
-          }
         } else {
           data[item.name] = item.data.toString();
         }
@@ -85,43 +59,34 @@ export default defineEventHandler(async (event) => {
 
     const oldImages =
       book.images === null ? [] : book.images.filter((img) => !!img);
-    const imagesToRemove = oldImages.filter((img) => !keepImages.includes(img));
-    let images = [...keepImages]; // почни з тих, які зберегли
-    console.log("KEEP IMAGES:", keepImages);
-    console.log("IMAGES TO REMOVE:", imagesToRemove);
-    console.log(
-      "IMAGES TO UPLOAD:",
-      imagesToUpload.map((i) => i.filePath)
-    );
     const oldFeedbackImages =
       book.feedback_images === null
         ? []
         : book.feedback_images.filter((img) => !!img);
-    const feedbackImagesToRemove = oldFeedbackImages.filter(
-      (img) => !keepFeedbackImages.includes(img)
-    );
-    let feedback_images = [...keepFeedbackImages];
 
-    if (imagesToUpload.length) {
-      const bulkAdditionResult = await replaceFiles(
-        imagesToRemove,
-        imagesToUpload
-      );
-      images = [...images, ...bulkAdditionResult.paths];
+    if (imagesToUpload?.length) {
+      const bulkAdditionResult = await replaceFiles(oldImages, imagesToUpload);
+      images = bulkAdditionResult.paths;
     }
-    data.images = images;
+    if (images.length) {
+      data.images = images;
+    } else {
+      data.images = book.images;
+    }
 
-    if (feedbackImagesToUpload.length) {
+    let feedback_images = [];
+    if (feedbackImagesToUpload?.length) {
       const feedbackBulkAdditionResult = await replaceFiles(
-        feedbackImagesToRemove,
+        oldFeedbackImages,
         feedbackImagesToUpload
       );
-      feedback_images = [
-        ...feedback_images,
-        ...feedbackBulkAdditionResult.paths,
-      ];
+      feedback_images = feedbackBulkAdditionResult.paths;
     }
-    data.feedback_images = feedback_images;
+    if (feedback_images.length) {
+      data.feedback_images = feedback_images;
+    } else {
+      data.feedback_images = book.feedback_images;
+    }
 
     const { error, value } = schema.validate(data);
     if (error) {
@@ -133,7 +98,6 @@ export default defineEventHandler(async (event) => {
         statusMessage: "Unprocessable Entity",
       }).toJSON();
     }
-
     await book.update(value);
 
     setResponseStatus(event, 200);
@@ -141,7 +105,7 @@ export default defineEventHandler(async (event) => {
   } catch (err) {
     console.log(err);
     setResponseStatus(event, 500);
-    // bulkRemoveFiles(images);
+    bulkRemoveFiles(images);
     const error = createError({
       message: "Something went wrong",
       statusCode: 500,
