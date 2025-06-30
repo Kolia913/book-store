@@ -15,12 +15,13 @@
         >
           {{ pageData?.title?.value }}
         </h2>
-        <p
-          class="text-wrap app-text-body font-normal"
+        <div
+          class="text-wrap app-text-body font-normal px-0! ql-editor"
           style="text-align: justify"
+          v-html="pageData?.description?.value"
         >
-          {{ pageData?.description?.value }}
-        </p>
+        
+        </div>
       </div>
 
       <AtomsAppOutlinedButton

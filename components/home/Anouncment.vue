@@ -23,9 +23,9 @@
         class="flex flex-col justify-between text-white text-left lg:items-end lg:text-right z-20"
       >
         <h3 class="app-text-h1 mb-[20px]">{{ pageData?.title?.value }}</h3>
-        <p class="text-2xl leading-relaxed mt-4 mb-12">
-          {{ pageData?.description?.value }}
-        </p>
+        <div class="text-2xl leading-relaxed mt-4 mb-1 ql-editor px-0!" v-html="pageData?.description?.value">
+        
+        </div>
 
         <!-- Button (Right-Aligned) -->
         <AtomsAppOutlinedButton
